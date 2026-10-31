@@ -10,7 +10,8 @@ Det inneholder ingen Microsoft-logoer, varemerker, ikoner, lyder eller annen
 proprietær grafikk. Se [designgrunnlaget](docs/DESIGN.md) og [planen](docs/PLAN.md).
 
 > **Status – milepæl 1 ferdig:** grunnstruktur, kartlegging og sikkerhetskopiering.
-> **Neste:** kartleggingsrapport fra Mint-maskinen, deretter Nemo, oppgavelinje og meny.
+> **Klart til test:** oppsettsprofil for Nemo og oppgavelinjen (`apply-profile.sh`).
+> **Neste:** tema-skjelett, deretter Nemo-, panel- og menystil.
 
 ## Krav
 
@@ -27,7 +28,8 @@ proprietær grafikk. Se [designgrunnlaget](docs/DESIGN.md) og [planen](docs/PLAN
 | `cinnamon/` | Cinnamon-skalltemaet: panel, meny, varsler, dialoger, OSD |
 | `gtk-3.0/` | GTK 3-temaet |
 | `gtk-4.0/` | GTK 4-temaet |
-| `scripts/` | Kartlegging, sikkerhetskopi og gjenoppretting |
+| `nemo/actions/` | Nemo-handlinger, som «Kopier som bane» |
+| `scripts/` | Kartlegging, sikkerhetskopi, gjenoppretting og oppsettsprofiler |
 | `backups/` | Tom i Git – sikkerhetskopier lagres lokalt (se under) |
 | `docs/` | Designgrunnlag, plan og kartleggingsrapporter som deles bevisst |
 
@@ -103,6 +105,29 @@ gjenopprettingen kan angres. Filer som ikke fantes da kopien ble tatt (for eksem
 etterpå.
 
 Uten skriptet går det også manuelt – se `GJENOPPRETT.txt` i sikkerhetskopien.
+
+## Steg 2: oppsett for Nemo og oppgavelinjen
+
+`apply-profile.sh` gjør Nemo og panelet mer kjent for Windows 11-brukere, bare ved hjelp
+av Cinnamons egne innstillinger. Det endrer ikke temaet og installerer ingen pakker.
+
+```bash
+./scripts/apply-profile.sh --dry-run alt   # se nøyaktig hva som endres
+./scripts/apply-profile.sh alt             # nemo + sentrert oppgavelinje
+```
+
+| Profil | Hva den gjør |
+| --- | --- |
+| `nemo` | Oppdater-knapp i verktøylinjen, kolonner i rekkefølgen navn, endret, type, størrelse, litt luftigere listevisning, og «Kopier som bane» i høyreklikkmenyen |
+| `oppgavelinje` | Menyknapp og apper i midten, panelhøyde 48 px, systemstatus samlet til høyre, varsler ved klokka, klokke over dato. Skillelinjen og favoritt-appleten fjernes fra panelet; favorittene ligger fortsatt i menyen |
+| `oppgavelinje-venstre` | Som over, men menyknapp og apper til venstre |
+| `alt` | `nemo` + `oppgavelinje` |
+
+Skriptet viser hver endring med gammel og ny verdi, ber om bekreftelse og tar
+sikkerhetskopi med `map-mint.sh` først. Angre med kommandoen det skriver ut, eller med
+`./scripts/restore.sh`. Dine egne valg, som skjulte filer og dobbeltklikk, røres ikke.
+
+«Kopier som bane» bruker `xclip`, `xsel`, `wl-copy` eller GTK, avhengig av hva som finnes.
 
 ## Installasjon av temaet
 

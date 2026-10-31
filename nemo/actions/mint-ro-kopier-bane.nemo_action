@@ -1,0 +1,11 @@
+[Nemo Action]
+# Mint-Ro: «Kopier som bane» – kopierer full bane til valgte filer/mapper,
+# én per linje, til utklippstavlen.
+Name=Kopier som bane
+Name[en]=Copy as path
+Comment=Kopier full bane til utklippstavlen
+Comment[en]=Copy the full path to the clipboard
+Exec=<mint-ro-kopier-bane.sh %F>
+Icon-Name=edit-copy-symbolic
+Selection=notnone
+Extensions=any;

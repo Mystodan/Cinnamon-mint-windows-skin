@@ -8,7 +8,8 @@ Dette repoet bygges av flere bidragsytere, også AI-agenter. Disse reglene gjeld
 - Installer kun per bruker (`~/.themes`, `~/.icons`, `~/.config`, `~/.local/share/cinnamon`, `~/.local/share/nemo`). Aldri `sudo`, aldri `/usr`.
 - Kjør `scripts/map-mint.sh` (sikkerhetskopi) før noe aktiveres eller overskrives.
 - Hver endring av brukeroppsett må kunne tilbakeføres med `scripts/restore.sh`.
-- Temafiler i `cinnamon/`, `gtk-3.0/`, `gtk-4.0/` (og senere `metacity-1/`). Skript i `scripts/`, dokumentasjon i `docs/`.
+- Temafiler i `cinnamon/`, `gtk-3.0/`, `gtk-4.0/` (og senere `metacity-1/`). Nemo-handlinger i `nemo/actions/` (prefiks `mint-ro-`). Skript i `scripts/`, dokumentasjon i `docs/`.
+- Innstillinger endres bare gjennom `scripts/apply-profile.sh`, som viser endringene, ber om bekreftelse og tar sikkerhetskopi først. Kontroller nøkler mot kildekoden for installert versjon.
 - Sjekk aldri inn brukerens sikkerhetskopier eller rapporter med personlige data utenom `docs/survey/`.
 - Bygg på kartleggingsrapporten i `docs/survey/`. Ikke anta Cinnamon- eller GTK-versjon.
 - Følg designgrunnlaget og bruk tokens fra `docs/DESIGN.md` i stedet for spredte verdier.

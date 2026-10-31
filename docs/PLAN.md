@@ -24,9 +24,9 @@ Relevant fra Cinnamon/Nemo 6.6:
 
 ### Funn fra første maskin (31.10.2026)
 
-Første kartlegging (`map-mint.sh` v1) manglet alle `org.cinnamon`-innstillinger på grunn av
-en feil i skriptet, rettet i v2. Panel, aktive temaer og effekter må derfor kartlegges på nytt.
-Det som er bekreftet:
+Full rapport: [survey/maskin-1.md](survey/maskin-1.md) (maskin- og brukernavn fjernet).
+Innstillingsnøkler og standardverdier er i tillegg kontrollert mot kildekoden til
+Cinnamon 6.6.9 og Nemo 6.6.3.
 
 | Område | Funn | Betydning for planen |
 | --- | --- | --- |
@@ -39,6 +39,20 @@ Det som er bekreftet:
 | Nemo-handlinger | Ingen egne; Mints standardhandlinger | «Kopier som bane» må legges til som egen handling |
 | Ikoner og markører | Papirus og Bibata er installert | Gode, frie kandidater – ingen nye pakker trengs |
 | `sassc` | Ikke installert | Ferdig CSS sjekkes inn; brukeren trenger ikke byggeverktøy |
+| Aktive temaer | Skrivebord `cinnamon` (standard), GTK `Mint-L-Blue`, vindusrammer `Mint-Y`, ikoner `Mint-Y-Sand`, markør `DMZ-White` 28 px, skrift Ubuntu 10 | Mint-Ro må se riktig ut med Mint-Y-ikoner, siden brukeren har valgt dem; ikonbytte er valgfritt |
+| Panel | Ett panel nederst, 40 px. Venstre: meny, skillelinje, gruppert vindusliste. Høyre: brett, XApp-status, varsler, skrivere, flyttbare stasjoner, tastatur, favoritter, nettverk, lyd, strøm, kalender, Cornerbar | Identisk med Cinnamon 6.6-standard, så profilen passer de fleste Mint-maskiner |
+| Effekter | Animasjoner og skrivebordseffekter på, kantfesting på, tekstskalering 1,0 | Bevegelse kan brukes, men alt må fungere når den slås av |
+
+### Oppgavelinje-profilen
+
+| Nøkkel | Nå | Profil | Hvorfor |
+| --- | --- | --- | --- |
+| `enabled-applets` | Meny og vindusliste til venstre | Meny og vindusliste i midten (eller venstre med `oppgavelinje-venstre`). Skillelinje og favoritt-applet fjernes; favorittene ligger fortsatt i menyen | Kjent Windows 11-oppsett, mindre rot |
+| Høyre sone | Varsler først | Brett, flyttbare stasjoner, skrivere, tastatur, nettverk, lyd, strøm, klokke, varsler, Cornerbar | Systemstatus samlet, varsler ved klokka |
+| `panels-height` | 40 | 48 | Windows 11-høyde, større klikkflater |
+| Kalender-appleten | Standardformat | Klokke over dato (`%H:%M%n%x`, følger 12/24 t og språk) | Kjent plassering og lesbarhet |
+
+Instans-id-ene til applets beholdes, så innstillingene deres (for eksempel festede apper) følger med.
 
 Nemo er allerede nær målet. Verktøylinjen viser tilbake, fram, opp, søk,
 adressebytte og visningsvalg. Adressen vises som brødsmuler, og menylinje, sidestolpe
@@ -130,7 +144,7 @@ Alle endringer sorteres i én av tre kategorier:
 ## Leveranse: oppsettsprofil
 
 Innstillingene (kategori A uten CSS) samles i et skript, `scripts/apply-profile.sh`, med
-profiler som `standard`, `sentrert` og `cinnamenu`. Skriptet:
+profilene `nemo`, `oppgavelinje`, `oppgavelinje-venstre` og `alt` (senere også `cinnamenu`). Skriptet:
 
 1. kjører `map-mint.sh` først,
 2. viser hva som endres og ber om bekreftelse,
@@ -145,7 +159,8 @@ vanlig Mint-tema.
 | # | Leveranse | Status |
 | --- | --- | --- |
 | 1 | Grunnstruktur, `map-mint.sh`, `restore.sh`, README | Ferdig |
-| 2 | Kartlegging av faktisk maskin (inkl. Nemo, applets, utvidelser) og justert plan | Delvis – Nemo og pakker kartlagt; panel og temaer må kjøres på nytt med v2 |
+| 2 | Kartlegging av faktisk maskin (inkl. Nemo, applets, utvidelser) og justert plan | Ferdig |
+| 2b | `apply-profile.sh`: Nemo- og oppgavelinjeprofil, «Kopier som bane» | Ferdig – venter på test på maskinen |
 | 3 | Tema-skjelett: `index.theme` og `cinnamon.css` bygget fra kildekoden til mint-themes for **installert** versjon (så alle selektorer dekkes), tokens innført | |
 | 4 | **Nemo:** GTK-stil for verktøylinje, adresse, sidestolpe, visninger, kontekstmenyer + Nemo-del av profilen + handlinger | |
 | 5 | **Oppgavelinje:** panel, vindusliste, systemstatus, kalender, varsler + panel-del av profilen | |
