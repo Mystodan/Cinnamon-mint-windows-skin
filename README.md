@@ -123,6 +123,8 @@ av Cinnamons egne innstillinger. Det endrer ikke temaet og installerer ingen pak
 | `oppgavelinje-venstre` | Som over, men menyknapp og apper til venstre |
 | `meny` | Startmenyen med søkefelt øverst og uten beskrivelser under appnavnene |
 | `alt` | `nemo` + `oppgavelinje` + `meny` |
+| `startmeny` | Windows 11-lignende meny med Cinnamenu (se under) |
+| `ikoner` | Fluent-ikoner (se under) |
 
 Skriptet viser hver endring med gammel og ny verdi, ber om bekreftelse og tar
 sikkerhetskopi med `map-mint.sh` først. Angre med kommandoen det skriver ut, eller med
@@ -150,6 +152,32 @@ Gå tilbake med `./scripts/restore.sh`, og fjern deretter temaet med
 avrundet på alle hjørner, startmeny og flyouts som svever over panelet, oppgavelinje med
 Windows 11-lignende indikatorer, og Nemo med flat verktøylinje og rolig markering av valgte
 filer. Flere detaljer er tilpasset fra Fluent GTK.
+
+### Valgfritt: Fluent-ikoner
+
+```bash
+./scripts/install-icons.sh              # grønn variant, passer Mint-Ro
+./scripts/apply-profile.sh ikoner       # ta dem i bruk
+```
+
+Henter [Fluent icon theme](https://github.com/vinceliuice/Fluent-icon-theme) (vinceliuice,
+GPL-3.0-or-later) på fast versjon og installerer bare for din bruker i `~/.local/share/icons`.
+Andre farger: `standard green grey orange pink purple red yellow teal`. Mangler Fluent et ikon,
+brukes Mint-Y. Profilen velger lys eller mørk utgave etter temaet, og `tema` / `tema-mork`
+bytter utgave automatisk. Gå tilbake med `restore.sh`, fjern med `install-icons.sh --remove`.
+
+### Valgfritt: Windows 11-lignende startmeny
+
+Den innebygde menyen kan ikke vise apper i rutenett. Det kan **Cinnamenu** fra Spices:
+
+1. Systeminnstillinger → **Applets** → fanen **Last ned** → søk «Cinnamenu» → Installer
+   (du trenger ikke legge den til i panelet selv).
+2. `./scripts/apply-profile.sh startmeny`
+
+Profilen bytter menyknappen med Cinnamenu på samme plass og setter opp: festede apper i rutenett
+først, kategorier og nylig brukte filer (som «Anbefalt»), søk øverst, av/på-linje nederst, ingen
+emoji- eller hjemmemappe-kategori. Festede apper er Cinnamons favoritter – høyreklikk en app for
+å feste den. `restore.sh` bytter tilbake til den innebygde menyen.
 
 ### Valgfritt: akryl (uskarp bakgrunn)
 
@@ -189,4 +217,5 @@ GPL-3.0-or-later – se [LICENSE](LICENSE).
 Mint-Ro er bygget på Mint-Y fra [mint-themes](https://github.com/linuxmint/mint-themes)
 av Clement Lefebvre og Linux Mint-teamet, lisensiert GPL-3.0-or-later. Deler av stilen for
 Nemo, oppgavelinjen og menyer er tilpasset fra [Fluent GTK theme](https://github.com/vinceliuice/Fluent-gtk-theme)
-av vinceliuice, lisensiert GPL-3.0-or-later.
+av vinceliuice, lisensiert GPL-3.0-or-later. Fluent-ikonene og Cinnamenu hentes fra sine egne prosjekter
+og følger ikke med i repoet.

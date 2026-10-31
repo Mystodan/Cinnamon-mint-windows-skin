@@ -125,7 +125,7 @@ Alle endringer sorteres i én av tre kategorier:
 | --- | --- | --- |
 | Søk straks Super trykkes | Standard i Cinnamon-menyen | A |
 | Ryddig meny med kjent struktur | Innebygd meny (6.6) med søkefelt (plassering kan velges), favoritter, kategorier og systemknapper; temaet gir 8 px radius, luft og tydelig hierarki | A |
-| Festede apper som rutenett og «Alle apper»-liste | Cinnamenu fra Spices støtter rutenett, favoritter i sidestolpe og filsøk. Tilbys som **valgfri profil**; innebygd meny er standard | B |
+| Festede apper som rutenett og «Alle apper»-liste | Cinnamenu fra Spices (5.7). Profilen `startmeny` bytter menyknappen på samme plass og skriver et Windows 11-oppsett (rutenett, favoritter først, nylig brukte, av/på-linje nederst, søk øverst) før appleten lastes. Temaet stiler Cinnamenus `menu-*`-klasser likt den innebygde menyen. Innebygd meny er standard | B |
 | Anbefalte filer | Nylige filer finnes i begge menyer som kategori | A/B |
 | Egen ny meny | Bygges ikke – Cinnamon har stabile løsninger | – |
 
@@ -138,7 +138,8 @@ Alle endringer sorteres i én av tre kategorier:
 | GTK 3-apper | `gtk-3.0/` med tokens fra DESIGN.md | A |
 | GTK 4 / libadwaita | `gtk-4.0/`; Mint-forken libAdapta kan gjøre at libadwaita-apper følger temaet – sjekkes i kartleggingen | A |
 | Mørk modus | Egen `Mint-Ro-Dark` for Cinnamon-skallet; GTK følger systemets fargeskjema | A |
-| Ikoner og markører | Fri ikonpakke som passer uttrykket; velges etter kartlegging | A |
+| Ikoner | Fluent icon theme (GPL-3) via `install-icons.sh` og profilen `ikoner`; lys/mørk utgave følger temaet; Mint-Y som reserve | B |
+| Markører | Fri markørpakke; uendret foreløpig | A |
 | Fest vinduer til kanter og hjørner | Innebygd i Cinnamon (dra til kant, Super+piltaster) | A |
 | Snap-layout-meny over maksimer-knappen | Finnes ikke i Cinnamon | C |
 
@@ -216,6 +217,7 @@ mørk variant. Cinnamon-skallet kan bare testes på maskinen.
 | 3 | Tema-skjelett: `src/build.py` bygger Mint-Ro fra Mint-Y i mint-themes 2.3.8 med tokens, aksent og nytegnede bilder; `install.sh`, `uninstall.sh`, profilen `tema` | Ferdig – testet på maskinen |
 | 3b | `Mint-Ro-Dark`, avrunding på alle vindushjørner, startmeny og flyouts i Windows 11-stil, profilene `meny` og `tema-mork` | Ferdig – venter på test på maskinen |
 | 3c | Fluent-inspirert oppgavelinje, Nemo, GTK-menyer og tekstfelt; akryl som valgfritt tillegg | Ferdig – venter på test på maskinen |
+| 3d | Fluent-ikoner (`install-icons.sh`, profil `ikoner`) og Windows 11-lignende startmeny med Cinnamenu (profil `startmeny`) | Ferdig – venter på test på maskinen |
 | 4 | **Nemo:** GTK-stil for verktøylinje, adresse, sidestolpe, visninger, kontekstmenyer + Nemo-del av profilen + handlinger | |
 | 5 | **Oppgavelinje:** panel, vindusliste, systemstatus, kalender, varsler + panel-del av profilen | |
 | 6 | **Startmeny:** grunnstil ferdig i 3b; finjustering etter test + valgfri Cinnamenu-profil | Delvis |

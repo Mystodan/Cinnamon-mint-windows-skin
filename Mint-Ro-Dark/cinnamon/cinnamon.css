@@ -3177,3 +3177,53 @@ On-Screen Keyboard (<= Cinnamon 6.4)
 .tooltip, .panel-tooltip {
   border-radius: 4px;
 }
+
+.menu-application-button,
+.menu-application-button-selected,
+.menu-category-button,
+.menu-category-button-selected,
+.menu-category-button-greyed,
+.menu-favorites-button {
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.menu-application-button:hover,
+.menu-category-button:hover,
+.menu-favorites-button:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: transparent;
+}
+
+.menu-application-button-selected {
+  background-color: rgba(255, 255, 255, 0.09);
+  border-color: transparent;
+}
+
+.menu-category-button-selected {
+  background-color: rgba(255, 255, 255, 0.09);
+  border-color: transparent;
+  box-shadow: inset 3px 0 0 0 #22855f;
+}
+
+.menu-applications-header-text {
+  font-weight: bold;
+  padding: 4px 8px;
+}
+
+.menu-favorites-box {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+#menu-search-entry {
+  border-radius: 9999px;
+  padding: 8px 16px;
+  border: 1px solid #8a8a8a;
+  background-color: #2b2b2b;
+}
+
+#menu-search-entry:focus {
+  border: 2px solid #22855f;
+  padding: 7px 15px;
+}

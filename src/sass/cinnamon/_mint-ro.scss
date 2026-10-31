@@ -178,3 +178,45 @@ $mr_suffix: if($variant == 'light', 'light', 'dark');
 .osd-window { border-radius: $radius; }
 .switcher-list { border-radius: $radius; box-shadow: $mr_flyout_shadow; }
 .tooltip, .panel-tooltip { border-radius: $mr_small_radius; }
+
+//
+// Cinnamenu (Spices, valgfri Windows 11-lignende startmeny med rutenett).
+// Bruker de eldre menu-*-klassene; gis samme form og lag som den innebygde menyen.
+//
+.menu-application-button,
+.menu-application-button-selected,
+.menu-category-button,
+.menu-category-button-selected,
+.menu-category-button-greyed,
+.menu-favorites-button {
+  border-radius: $mr_small_radius;
+  border: 1px solid transparent;
+}
+
+.menu-application-button:hover,
+.menu-category-button:hover,
+.menu-favorites-button:hover { background-color: $mr_hover; border-color: transparent; }
+
+.menu-application-button-selected { background-color: $mr_selected; border-color: transparent; }
+
+.menu-category-button-selected {
+  background-color: $mr_selected;
+  border-color: transparent;
+  box-shadow: inset 3px 0 0 0 $accent_color;
+}
+
+.menu-applications-header-text { font-weight: bold; padding: 4px 8px; }
+
+.menu-favorites-box { background-color: transparent; border-color: transparent; }
+
+#menu-search-entry {
+  border-radius: 9999px;
+  padding: 8px 16px;
+  border: 1px solid $entry_border;
+  background-color: $bg_color;
+
+  &:focus {
+    border: 2px solid $accent_color;
+    padding: 7px 15px;
+  }
+}

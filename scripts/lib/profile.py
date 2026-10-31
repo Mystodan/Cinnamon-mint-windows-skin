@@ -11,6 +11,7 @@ import os
 import sys
 
 MENU = "menu@cinnamon.org"
+MENUS = (MENU, "Cinnamenu@json")          # menyknapper vi kjenner igjen
 TASK_LISTS = ("grouped-window-list@cinnamon.org", "window-list@cinnamon.org")
 REMOVE_IN_TASKBAR = ("separator@cinnamon.org", "favorites@cinnamon.org")
 # Rekkefølge i høyre sone, fra venstre mot høyre. Ukjente applets havner før «network».
@@ -70,9 +71,9 @@ def fmt_applets(applets):
 
 def target_panel(applets):
     for a in applets:
-        if a["uuid"] == MENU:
+        if a["uuid"] in MENUS:
             return a["panel"]
-    raise ProfileError("fant ikke menyknappen (menu@cinnamon.org) i noe panel")
+    raise ProfileError("fant ikke menyknappen (menu@cinnamon.org eller Cinnamenu@json) i noe panel")
 
 
 def taskbar(values, mode):
@@ -82,7 +83,7 @@ def taskbar(values, mode):
         raise ProfileError("ukjent modus: %s" % mode)
     applets = parse_applets(values)
     panel = target_panel(applets)
-    menu = next(a for a in applets if a["panel"] == panel and a["uuid"] == MENU)
+    menu = next(a for a in applets if a["panel"] == panel and a["uuid"] in MENUS)
     menu_zone = menu["zone"]
 
     others = [a for a in applets if a["panel"] != panel]
@@ -96,7 +97,7 @@ def taskbar(values, mode):
             continue
         kept.append(a)
 
-    main = [a for a in kept if a["uuid"] == MENU]
+    main = [a for a in kept if a["uuid"] in MENUS]
     lists = [a for a in kept if a["uuid"] in TASK_LISTS]
     main += sorted(lists, key=lambda a: TASK_LISTS.index(a["uuid"]))
     rest = [a for a in kept if a not in main]
@@ -198,6 +199,63 @@ def parse_pairs(pairs):
     return out
 
 
+def next_instance_id(values):
+    ids = [int(a["rest"][0]) for a in parse_applets(values) if a["rest"] and a["rest"][0].isdigit()]
+    return str(max(ids) + 1 if ids else 0)
+
+
+def replace_applet(values, old_uuid, new_uuid, new_id):
+    """Bytter første forekomst av old_uuid med new_uuid på samme panel, sone og plass."""
+    applets = parse_applets(values)
+    for a in applets:
+        if a["uuid"] == old_uuid:
+            a["uuid"], a["rest"] = new_uuid, [new_id]
+            return fmt_applets(applets)
+    raise ProfileError("fant ikke %s i panelet" % old_uuid)
+
+
+def pick_schema(applet_dir, cinnamon_version):
+    """settings-schema.json for riktig versjonsmappe (høyeste versjon <= Cinnamon), ellers rotmappa."""
+    def ver(v):
+        try:
+            return tuple(int(x) for x in v.split("."))
+        except ValueError:
+            return None
+    cv = ver(cinnamon_version) or (99,)
+    best = None
+    for d in os.listdir(applet_dir):
+        v = ver(d)
+        if v and v <= cv and os.path.exists(os.path.join(applet_dir, d, "settings-schema.json")):
+            if best is None or v > best[0]:
+                best = (v, d)
+    path = os.path.join(applet_dir, best[1], "settings-schema.json") if best else os.path.join(applet_dir, "settings-schema.json")
+    if not os.path.exists(path):
+        raise ProfileError("fant ikke settings-schema.json i %s" % applet_dir)
+    return path
+
+
+def config_from_schema(schema_path, out, wanted):
+    """Lager en applet-innstillingsfil slik Cinnamon selv gjør det: skjemaet med value=default,
+    pluss ønskede verdier. Skriver ikke over en eksisterende fil."""
+    if os.path.exists(out):
+        raise ProfileError("finnes allerede: %s" % out)
+    with open(schema_path, encoding="utf-8") as f:
+        data = json.load(f)
+    for k, v in data.items():
+        if isinstance(v, dict) and "default" in v:
+            v["value"] = v["default"]
+    for k, v in wanted.items():
+        if k not in data or not isinstance(data[k], dict) or "default" not in data[k]:
+            raise ProfileError("innstillingen %s finnes ikke i %s" % (k, schema_path))
+        data[k]["value"] = v
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    tmp = out + ".mint-ro.tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+        f.write("\n")
+    os.replace(tmp, out)
+
+
 def main(argv):
     if not argv:
         raise ProfileError("mangler kommando")
@@ -222,6 +280,14 @@ def main(argv):
         pairs = [x for x in args[1:] if x != "--write"]
         for c in applet_settings(args[0], parse_pairs(pairs), write):
             print(c)
+    elif cmd == "next-instance-id":   # CURRENT
+        print(next_instance_id(parse_strv(args[0])))
+    elif cmd == "replace-applet":     # CURRENT OLD NEW ID
+        print(fmt_strv(replace_applet(parse_strv(args[0]), args[1], args[2], args[3])))
+    elif cmd == "pick-schema":        # APPLETDIR CINNAMONVERSION
+        print(pick_schema(args[0], args[1]))
+    elif cmd == "new-config":         # SCHEMA OUT key=json ...
+        config_from_schema(args[0], args[1], parse_pairs(args[2:]))
     else:
         raise ProfileError("ukjent kommando: %s" % cmd)
 
