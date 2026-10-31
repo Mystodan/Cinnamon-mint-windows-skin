@@ -101,6 +101,37 @@ list_dirs() {
   fi
 }
 
+nemo_version() {
+  local v=""
+  have nemo && v="$(timeout 5 nemo --version 2>/dev/null | head -1)"
+  [ -n "$v" ] && { echo "$v"; return; }
+  pkgver nemo
+}
+
+# Lister Cinnamon-spices (applets/extensions/desklets) med navn og versjon fra metadata.json.
+list_spices() {
+  local dir="$1" found=0 d name ver
+  if [ ! -d "$dir" ]; then echo "- (mappen finnes ikke)"; return; fi
+  for d in "$dir"/*/; do
+    [ -d "$d" ] || continue
+    found=1
+    name=""; ver=""
+    if [ -r "$d/metadata.json" ]; then
+      name="$(grep -m1 -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' "$d/metadata.json" 2>/dev/null | sed 's/.*:[[:space:]]*"//; s/"$//')"
+      ver="$(grep -m1 -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' "$d/metadata.json" 2>/dev/null | sed 's/.*:[[:space:]]*"//; s/"$//')"
+    fi
+    echo "- \`$(basename "$d")\`${name:+ – $name}${ver:+ ($ver)}"
+  done
+  [ "$found" -eq 1 ] || echo "- (tom)"
+}
+
+# Skriver gsettings-verdier for en liste nøkler i et skjema, én per linje.
+gs_block() {
+  local schema="$1"; shift
+  local k
+  for k in "$@"; do printf '%-34s %s\n' "$k:" "$(gs "$schema" "$k")"; done
+}
+
 mint_info() {
   if [ -r /etc/linuxmint/info ]; then
     grep -E '^(RELEASE|CODENAME|EDITION|DESCRIPTION)=' /etc/linuxmint/info
@@ -156,6 +187,9 @@ FILE_PATHS=(
   .config/cinnamon
   .cinnamon/configs
   .config/xsettingsd
+  .config/nemo
+  .local/share/nemo
+  .local/share/cinnamon
 )
 : >"$DEST/files/manifest.tsv"
 for rel in "${FILE_PATHS[@]}"; do
@@ -195,9 +229,11 @@ done
   echo "| Linux Mint | $( (grep -E '^RELEASE=' /etc/linuxmint/info 2>/dev/null || echo 'RELEASE=(ukjent)') | cut -d= -f2) |"
   echo "| Cinnamon | $(cinnamon_version) |"
   echo "| Muffin | $(pkgver muffin) |"
+  echo "| Nemo | $(nemo_version) |"
   echo "| GTK 3 | $(gtk3_version) |"
   echo "| GTK 4 | $(pkgver libgtk-4-1) |"
   echo "| libadwaita | $(pkgver libadwaita-1-0) |"
+  echo "| libAdapta (Mint-fork) | $(pkgver libadapta-1-0) |"
   echo "| XApp | $(pkgver libxapp1) |"
   echo
   echo "## Aktive temaer og utseende"
@@ -227,6 +263,66 @@ done
     *)   echo "  $applets" ;;
   esac
   echo "enabled-extensions: $(gs org.cinnamon enabled-extensions)"
+  echo
+  gs_block org.cinnamon panels-autohide panel-zone-symbolic-icon-sizes panel-zone-text-sizes \
+    favorite-apps desktop-effects-workspace enabled-desklets
+  echo '```'
+  echo
+  echo "## Cinnamon-spices (applets, utvidelser, desklets)"
+  for kind in applets extensions desklets; do
+    echo "### $kind – brukerinstallert (~/.local/share/cinnamon/$kind)"
+    list_spices "$HOME/.local/share/cinnamon/$kind"
+    echo "### $kind – system (/usr/share/cinnamon/$kind)"
+    list_spices "/usr/share/cinnamon/$kind"
+  done
+  echo "### Lagrede innstillinger for spices"
+  list_dirs "$HOME/.config/cinnamon/spices"
+  list_dirs "$HOME/.cinnamon/configs" | sed 's/^- /- (gammel plassering) /'
+  echo
+  echo "## Nemo (filutforsker)"
+  echo
+  echo "### Utvidelser og relaterte pakker"
+  echo
+  echo "| Pakke | Versjon |"
+  echo "| --- | --- |"
+  for p in nemo-python nemo-preview nemo-terminal nemo-fileroller nemo-share \
+           nemo-image-converter nemo-emblems nemo-compare nemo-audio-tab nemo-gtkhash; do
+    echo "| $p | $(pkgver "$p") |"
+  done
+  echo
+  echo "### Handlinger og skript"
+  echo "#### ~/.local/share/nemo/actions"
+  if [ -d "$HOME/.local/share/nemo/actions" ]; then
+    ls -1 "$HOME/.local/share/nemo/actions" 2>/dev/null | sed 's/^/- /' | grep . || echo "- (tom)"
+  else echo "- (mappen finnes ikke)"; fi
+  echo "#### /usr/share/nemo/actions"
+  if [ -d /usr/share/nemo/actions ]; then
+    ls -1 /usr/share/nemo/actions 2>/dev/null | sed 's/^/- /' | grep . || echo "- (tom)"
+  else echo "- (mappen finnes ikke)"; fi
+  echo "#### ~/.local/share/nemo/scripts"
+  if [ -d "$HOME/.local/share/nemo/scripts" ]; then
+    ls -1 "$HOME/.local/share/nemo/scripts" 2>/dev/null | sed 's/^/- /' | grep . || echo "- (tom)"
+  else echo "- (mappen finnes ikke)"; fi
+  echo
+  echo "### Innstillinger"
+  for schema in org.nemo.preferences org.nemo.window-state org.nemo.icon-view org.nemo.list-view; do
+    echo "#### $schema"
+    echo '```'
+    if have gsettings && gsettings list-schemas 2>/dev/null | grep -qx "$schema"; then
+      gsettings list-recursively "$schema" 2>/dev/null | sed "s/^$schema //" | sort
+    else
+      echo "(skjema $schema finnes ikke)"
+    fi
+    echo '```'
+  done
+  echo
+  echo "## Effekter og tilgjengelighet"
+  echo '```'
+  gs_block org.cinnamon desktop-effects-workspace startup-animation
+  gs_block org.cinnamon.desktop.interface enable-animations text-scaling-factor gtk-overlay-scrollbars
+  gs_block org.cinnamon.desktop.a11y.interface high-contrast
+  gs_block org.cinnamon.desktop.a11y.applications screen-reader-enabled screen-magnifier-enabled
+  gs_block org.cinnamon.muffin edge-tiling tile-maximize
   echo '```'
   echo
   echo "## Relevante pakker"

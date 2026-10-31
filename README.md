@@ -1,13 +1,16 @@
 # Mint-Ro
 
-Et moderne tema for Linux Mint Cinnamon, med Windows 11 som visuell inspirasjon:
-avrundede former, rolige farger, luftige avstander og diskret transparens.
-Temaet er laget for Cinnamon og Mint – ikke en kopi av Windows. Det inneholder ingen
-Windows-logoer, varemerker eller proprietær grafikk.
+Et moderne tema og oppsett for Linux Mint Cinnamon, bygget på prinsippene i
+Fluent Design. Målet er at **filutforskeren, startmenyen og oppgavelinjen** skal føles
+moderne og kjente for en Windows 11-bruker – med arbeidsflyt foran visuell likhet –
+samtidig som skrivebordet beholder sin Mint- og Cinnamon-identitet.
 
-> **Status – milepæl 1:** grunnstruktur, kartlegging og sikkerhetskopiering er på plass.
-> Selve utseendet bygges trinnvis etter [planen](docs/PLAN.md), basert på
-> kartleggingen av den faktiske maskinen.
+Prosjektet bruker bare Cinnamons egne komponenter, tema- og innstillingsformater.
+Det inneholder ingen Microsoft-logoer, varemerker, ikoner, lyder eller annen
+proprietær grafikk. Se [designgrunnlaget](docs/DESIGN.md) og [planen](docs/PLAN.md).
+
+> **Status – milepæl 1 ferdig:** grunnstruktur, kartlegging og sikkerhetskopiering.
+> **Neste:** kartleggingsrapport fra Mint-maskinen, deretter Nemo, oppgavelinje og meny.
 
 ## Krav
 
@@ -26,7 +29,7 @@ Windows-logoer, varemerker eller proprietær grafikk.
 | `gtk-4.0/` | GTK 4-temaet |
 | `scripts/` | Kartlegging, sikkerhetskopi og gjenoppretting |
 | `backups/` | Tom i Git – sikkerhetskopier lagres lokalt (se under) |
-| `docs/` | Plan og kartleggingsrapporter som deles bevisst |
+| `docs/` | Designgrunnlag, plan og kartleggingsrapporter som deles bevisst |
 
 Repoet er selve temamappen: når temaet er klart, kopieres `cinnamon/`, `gtk-3.0/`,
 `gtk-4.0/` og `index.theme` til `~/.themes/Mint-Ro/`.
@@ -43,12 +46,15 @@ cd cinnamon-mint-windows-skin
 
 Skriptet:
 
-1. viser Linux Mint-, Cinnamon-, Muffin-, GTK 3-, GTK 4- og libadwaita-versjon
+1. viser Linux Mint-, Cinnamon-, Muffin-, Nemo-, GTK 3-, GTK 4- og libadwaita-versjon
 2. viser aktivt Cinnamon-, GTK-, vindusramme-, ikon- og markørtema
 3. lister relevante temaer, ikonpakker og pakker som er installert
-4. tar en datert sikkerhetskopi av innstillingene (`dconf`) og brukerens GTK- og Cinnamon-filer
-5. lagrer en lesbar rapport, `rapport.md`, sammen med sikkerhetskopien
-6. skriver ut hvor alt ble lagret og hvilken kommando som gjenoppretter det
+4. kartlegger panelet, applets, utvidelser og desklets (innebygde og fra Spices)
+5. kartlegger Nemo: innstillinger, verktøylinje, utvidelser, handlinger og skript
+6. viser effekter og tilgjengelighetsinnstillinger (animasjoner, tekstskalering, høy kontrast)
+7. tar en datert sikkerhetskopi av innstillingene (`dconf`) og brukerens GTK-, Cinnamon- og Nemo-filer
+8. lagrer en lesbar rapport, `rapport.md`, sammen med sikkerhetskopien
+9. skriver ut hvor alt ble lagret og hvilken kommando som gjenoppretter det
 
 Det endrer ikke aktivt tema, installerer ingenting og overskriver ingen konfigurasjon.
 Mangler et verktøy (for eksempel `dconf`), sier rapporten det tydelig i stedet for å feile.
@@ -74,7 +80,8 @@ Sikkerhetskopier lagres lokalt, aldri i Git:
   GJENOPPRETT.txt    kommandoer for gjenoppretting
   dconf/             org.cinnamon, org.nemo, org.x, org.gtk.settings, gnome interface/wm
                      + full.dconf (hele dconf, kun til referanse)
-  files/             ~/.config/gtk-3.0, gtk-4.0, cinnamon, xsettingsd, ~/.cinnamon/configs, ~/.gtkrc-2.0
+  files/             ~/.config/gtk-3.0, gtk-4.0, cinnamon, nemo, xsettingsd, ~/.cinnamon/configs,
+                     ~/.local/share/cinnamon (Spices), ~/.local/share/nemo (handlinger), ~/.gtkrc-2.0
   files/manifest.tsv hva som fantes da kopien ble tatt
 ```
 

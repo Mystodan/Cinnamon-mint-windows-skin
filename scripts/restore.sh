@@ -20,7 +20,7 @@ ROOT="${MINT_RO_BACKUP_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mint-ro/backups
 YES=0; DRY=0; LIST=0; SRC=""
 
 # Bare disse stiene kan gjenopprettes (samme liste som map-mint.sh).
-ALLOWED_FILES=" .config/gtk-3.0 .config/gtk-4.0 .gtkrc-2.0 .config/cinnamon .cinnamon/configs .config/xsettingsd "
+ALLOWED_FILES=" .config/gtk-3.0 .config/gtk-4.0 .gtkrc-2.0 .config/cinnamon .cinnamon/configs .config/xsettingsd .config/nemo .local/share/nemo .local/share/cinnamon "
 ALLOWED_DCONF=" /org/cinnamon/ /org/nemo/ /org/x/ /org/gtk/settings/ /org/gnome/desktop/interface/ /org/gnome/desktop/wm/preferences/ "
 
 usage() { sed -n '2,14p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
