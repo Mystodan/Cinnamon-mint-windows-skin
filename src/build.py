@@ -282,9 +282,31 @@ def patch_libadwaita(out):
         write(p, s)
 
 
+# Oppgavelinje-indikatorer (Windows 11-lignende piller). viewBox 24×48 skaleres med
+# «background-size: contain» til panelhøyden; pillen ligger nederst (eller øverst).
+INDICATOR_COLORS = {
+    "light": {"running": "#8a8a8a", "focused": ACCENT_LIGHT_FILL},   # stroke-control / accent
+    "dark": {"running": "#9e9e9e", "focused": ACCENT_DARK_TEXT},
+}
+INDICATOR_WIDTH = {"running": 6, "focused": 16}
+
+
+def write_indicators(out):
+    d = os.path.join(out, "cinnamon", "common-assets", "mint-ro")
+    os.makedirs(d, exist_ok=True)
+    for variant, colors in INDICATOR_COLORS.items():
+        for kind, color in colors.items():
+            w = INDICATOR_WIDTH[kind]
+            for edge, y in (("bottom", 44), ("top", 1)):
+                svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="48" viewBox="0 0 24 48">'
+                       '<rect x="%g" y="%d" width="%d" height="3" rx="1.5" fill="%s"/></svg>\n'
+                       % ((24 - w) / 2, y, w, color))
+                write(os.path.join(d, "indicator-%s-%s-%s.svg" % (kind, edge, variant)), svg)
+
+
 GENERATED_README = """# {d}
 
-Generert av `src/build.py` fra Mint-Y i mint-themes {tag}, med Mint-Ro-tokens.
+Generert av `src/build.py` fra Mint-Y i mint-themes {tag}, med Mint-Ro-tokens og deler\ntilpasset fra Fluent GTK theme (vinceliuice, GPL-3.0-or-later).
 Ikke rediger filene her direkte: endre `src/sass/` og kjør `python3 -I src/build.py`.
 """
 
@@ -352,6 +374,7 @@ def main():
             assemble(work, out, key)
             patch_metacity(out, VARIANTS[key]["name"])
             patch_libadwaita(out)
+            write_indicators(out)
             outs[key] = out
         log("Skriver temaene til repoet")
         for key, out in outs.items():

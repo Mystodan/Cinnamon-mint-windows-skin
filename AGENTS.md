@@ -23,6 +23,7 @@ Dette repoet bygges av flere bidragsytere, også AI-agenter. Disse reglene gjeld
 - Overskrive `~/.config/gtk-4.0` uten `--gtk4` og sikkerhetskopi.
 - Endre systemfiler eller Mint-pakker.
 - Endre `UPSTREAM_TAG` i `src/build.py` uten å bygge på nytt og teste mot installert Cinnamon-versjon.
+- Kopiere kode fra andre temaer uten at lisensen er forenlig med GPL-3.0-or-later og kilden er kreditert i SCSS-fila og README.
 
 ## Arbeidsflyt
 

@@ -4527,3 +4527,19 @@ menubutton arrow.right {
 @define-color wm_icon_unfocused_bg #555559;
 @define-color wm_icon_hover_bg #C4C7CC;
 @define-color wm_icon_active_bg #FFFFFF;
+popover > contents {
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px #3b3b3b;
+}
+
+popover.menu modelbutton {
+  border-radius: 4px;
+}
+
+tooltip {
+  border-radius: 4px;
+}
+
+entry:focus-within {
+  box-shadow: inset 0 -2px #1f7a57;
+}

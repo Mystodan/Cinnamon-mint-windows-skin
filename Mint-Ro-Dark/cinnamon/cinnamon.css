@@ -3089,3 +3089,91 @@ On-Screen Keyboard (<= Cinnamon 6.4)
   border: 2px solid #22855f;
   padding: 7px 15px;
 }
+
+#panel {
+  font-weight: normal;
+}
+
+.applet-label {
+  font-weight: normal;
+}
+
+.panel-top .applet-box, .panel-bottom .applet-box {
+  margin: 4px 1px;
+  border-radius: 4px;
+}
+
+.panel-top .applet-box:hover, .panel-top .applet-box:checked, .panel-bottom .applet-box:hover, .panel-bottom .applet-box:checked {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.grouped-window-list-item-box {
+  font-weight: normal;
+  border-radius: 4px;
+}
+
+.grouped-window-list-item-box.top, .grouped-window-list-item-box.bottom {
+  margin: 4px 1px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-width: 0;
+}
+
+.grouped-window-list-item-box:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.grouped-window-list-item-box.bottom:active, .grouped-window-list-item-box.bottom:checked {
+  border-width: 0;
+  background-image: url("common-assets/mint-ro/indicator-running-bottom-dark.svg");
+  background-size: contain;
+}
+
+.grouped-window-list-item-box.top:active, .grouped-window-list-item-box.top:checked {
+  border-width: 0;
+  background-image: url("common-assets/mint-ro/indicator-running-top-dark.svg");
+  background-size: contain;
+}
+
+.grouped-window-list-item-box.bottom:focus {
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image: url("common-assets/mint-ro/indicator-focused-bottom-dark.svg");
+  background-size: contain;
+}
+
+.grouped-window-list-item-box.top:focus {
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image: url("common-assets/mint-ro/indicator-focused-top-dark.svg");
+  background-size: contain;
+}
+
+.grouped-window-list-item-box:focus:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.grouped-window-list-thumbnail-menu {
+  border-radius: 8px;
+  border: 1px solid #3b3b3b;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.grouped-window-list-thumbnail-menu .item-box {
+  border-radius: 4px;
+}
+
+.notification, #notification {
+  border-radius: 8px;
+}
+
+.osd-window {
+  border-radius: 8px;
+}
+
+.switcher-list {
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.tooltip, .panel-tooltip {
+  border-radius: 4px;
+}

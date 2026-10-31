@@ -11,7 +11,7 @@ proprietær grafikk. Se [designgrunnlaget](docs/DESIGN.md) og [planen](docs/PLAN
 
 > **Status – milepæl 1 ferdig:** grunnstruktur, kartlegging og sikkerhetskopiering.
 > **Testet:** oppsettsprofil for Nemo og oppgavelinjen.
-> **Klart til test:** mørk variant, avrundede vinduer og ny startmeny (`install.sh`, `apply-profile.sh meny`, `tema` / `tema-mork`).
+> **Klart til test:** Fluent-inspirert oppgavelinje og Nemo, mørk variant, avrundede vinduer og ny startmeny (`git pull` + `install.sh`).
 > **Neste:** stil for Nemo, deretter panel og meny.
 
 ## Krav
@@ -147,8 +147,27 @@ Gå tilbake med `./scripts/restore.sh`, og fjern deretter temaet med
 `./scripts/uninstall.sh` (som nekter så lenge Mint-Ro er i bruk).
 
 **Status:** Mint-Ro bygger på Mint-Y med Mint-Ro-farger i lys og mørk variant, vinduer
-avrundet på alle hjørner, og startmeny og flyouts som svever over panelet i Windows 11-stil.
-Finjustering av Nemo, panel og GTK-kontroller kommer i de neste milepælene.
+avrundet på alle hjørner, startmeny og flyouts som svever over panelet, oppgavelinje med
+Windows 11-lignende indikatorer, og Nemo med flat verktøylinje og rolig markering av valgte
+filer. Flere detaljer er tilpasset fra Fluent GTK.
+
+### Valgfritt: akryl (uskarp bakgrunn)
+
+Cinnamon-temaer kan ikke gjøre bakgrunnen uskarp selv, så Mint-Ro er solid og lesbart som
+standard. Vil du ha Windows 11-akryl bak panel, startmeny og varsler, kan utvidelsen
+**Blur Cinnamon** legges til via Mints egen utvidelsesbehandling:
+
+1. Systeminnstillinger → **Utvidelser** → fanen **Last ned** → søk «Blur Cinnamon» → Installer.
+2. Fanen **Administrer** → velg Blur Cinnamon → **+** for å slå den på.
+3. Åpne innstillingene (tannhjulet):
+   - Slå på **Panels**, **Popup Menus** og **Notifications** (menyer og varsler er av som standard).
+   - Uskarphet: **Dual Kawase Dynamic** (lett for skjermkortet, viser vinduene bak).
+   - **Tint**: `#f3f3f3` med Mint-Ro, `#202020` med Mint-Ro-Dark, intensitet 60–75 % så teksten
+     forblir lesbar.
+   - Ikke velg «Transparent» for menyer – det gir gjennomsiktighet uten uskarphet.
+
+Utvidelsen gjør bakgrunnene gjennomsiktige selv; temaet trenger ingen endring. Slå den av
+igjen i samme vindu hvis noe hakker (det er rapportert treg rulling i menyer på GTX 1050).
 
 ### Bygge temaet selv
 
@@ -168,4 +187,6 @@ kompilerer og tegner bildene med aksentfarge på nytt.
 GPL-3.0-or-later – se [LICENSE](LICENSE).
 
 Mint-Ro er bygget på Mint-Y fra [mint-themes](https://github.com/linuxmint/mint-themes)
-av Clement Lefebvre og Linux Mint-teamet, lisensiert GPL-3.0-or-later.
+av Clement Lefebvre og Linux Mint-teamet, lisensiert GPL-3.0-or-later. Deler av stilen for
+Nemo, oppgavelinjen og menyer er tilpasset fra [Fluent GTK theme](https://github.com/vinceliuice/Fluent-gtk-theme)
+av vinceliuice, lisensiert GPL-3.0-or-later.

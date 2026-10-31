@@ -21,8 +21,9 @@ mer sammenhengende eller enklere å bruke?* Hvis svaret er nei, droppes det.
 - Ingen Microsoft-logoer, varemerker, Segoe-skrift, Fluent-ikoner fra Microsoft, lyder eller grafikk.
 - Ingen piksel-for-piksel-kopi. Proporsjoner og mønstre kan ligne; detaljene er våre egne.
 - Transparens og animasjon brukes bare der de ikke svekker lesbarhet, ytelse eller tilgjengelighet.
-  Cinnamon kan ikke gjøre ekte uskarphet (Mica/Acrylic). Vi bruker derfor **lagdelte, tette flater**
-  i stedet for halvgjennomsiktige; eventuell transparens er valgfri og ligger aldri bak tekst.
+  Cinnamon-temaer kan ikke gjøre ekte uskarphet (Mica/Acrylic). Vi bruker derfor **lagdelte, tette
+  flater**. Akryl bak panel, meny og varsler er et valgfritt tillegg via utvidelsen Blur Cinnamon,
+  med tint fra `bg-base` slik at teksten forblir lesbar.
 
 ## Designtokens
 

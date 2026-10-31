@@ -1,3 +1,151 @@
-// Mint-Ro: komponentjusteringer for GTK.
-// Importeres til slutt, etter alle Mint-Y-regler. Tom i skjelettet; fylles i
-// milepælene for Nemo, vinduer og kontroller (se docs/PLAN.md).
+// Mint-Ro: komponentjusteringer for GTK 3.
+// Importeres til slutt, etter alle Mint-Y-regler, og bruker tokens fra
+// _mint-ro-tokens.scss (se docs/DESIGN.md).
+//
+// Deler er tilpasset fra Fluent GTK theme av vinceliuice
+// (https://github.com/vinceliuice/Fluent-gtk-theme, GPL-3.0-or-later).
+
+$mr_radius: 4px;                                             // kontroller og rader
+$mr_menu_radius: 8px;                                        // menyer, popovere
+$mr_hover: if($variant == 'light', rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.06));
+$mr_pressed: if($variant == 'light', rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.09));
+// Valgte filer: rolig aksenttone med vanlig tekstfarge, som i Windows 11-utforskeren.
+$mr_select: rgba($selected_bg_color, if($variant == 'light', 0.16, 0.32));
+$mr_select_backdrop: rgba($selected_bg_color, if($variant == 'light', 0.10, 0.20));
+$mr_menu_shadow: 0 8px 16px rgba(0, 0, 0, if($variant == 'light', 0.18, 0.40));
+$mr_divider: $separator_color;
+
+//
+// Menyer og popovere: avrundet, luft rundt radene, myk skygge (lag 3)
+//
+.csd.popup decoration {
+  border-radius: $mr_menu_radius;
+  box-shadow: $mr_menu_shadow, 0 0 0 1px $mr_divider;
+}
+
+menu, .menu, .context-menu {
+  .csd & {
+    padding: 4px 0;
+    border-radius: $mr_menu_radius;
+
+    menuitem {
+      border-radius: $mr_radius;
+      margin: 0 4px;
+      padding: 6px 10px;
+    }
+  }
+}
+
+popover.background {
+  border-radius: $mr_menu_radius;
+
+  .csd & { box-shadow: $mr_menu_shadow, 0 0 0 1px $mr_divider; }
+
+  modelbutton.flat { border-radius: $mr_radius; }
+}
+
+tooltip.background { border-radius: $mr_radius; }
+.csd tooltip decoration, tooltip.csd decoration { border-radius: $mr_radius; }
+
+//
+// Felt: aksentstrek nederst ved fokus, som Windows 11-tekstfelt
+//
+entry:focus { box-shadow: inset 0 -2px $selected_bg_color; }
+
+//
+// Nemo (tilpasset fra Fluent GTK, apps/_nemo.scss)
+//
+.nemo-window {
+
+  // Verktøylinjen: flate knapper som får form ved hover, brødsmuler i dempet farge.
+  .primary-toolbar {
+    background-color: $header_bg;
+    border-bottom: 1px solid $mr_divider;
+    padding: 6px 4px;
+
+    button:not(.text-button):not(.suggested-action):not(.destructive-action) {
+      margin: 0 2px;
+      min-height: 24px;
+      min-width: 24px;
+      padding: 3px;
+      border-radius: $mr_radius;
+      border-color: transparent;
+      background-color: transparent;
+      background-image: none;
+      box-shadow: none;
+
+      &:hover { background-color: $mr_hover; }
+      &:active, &:checked { background-color: $mr_pressed; }
+      &:disabled { background-color: transparent; }
+    }
+
+    // Stilinjen (brødsmuler)
+    button.text-button {
+      padding-left: 8px;
+      padding-right: 8px;
+      margin: 0;
+      border-radius: $mr_radius;
+      border-color: transparent;
+      background-color: transparent;
+      background-image: none;
+      box-shadow: none;
+      color: $dim_label_fg_color;
+
+      &:hover { color: $fg_color; background-color: $mr_hover; }
+      &:active, &:checked { color: $fg_color; background-color: transparent; }
+      &:checked:hover { background-color: $mr_hover; }
+      &:disabled { color: $insensitive_fg_color; }
+    }
+
+    entry {
+      min-height: 24px;
+      margin: 0 2px;
+      border-radius: $mr_radius;
+    }
+  }
+
+  .toolbar button { border-radius: $mr_radius; }
+
+  scrolledwindow.frame { border-style: none; }
+
+  // Valgte filer og mapper
+  .nemo-window-pane {
+    .view:selected,
+    .view text:selected,
+    iconview:selected,
+    treeview.view:selected {
+      &, &:focus {
+        color: $text_color;
+        background-color: $mr_select;
+      }
+      &:backdrop { color: $text_color; background-color: $mr_select_backdrop; }
+    }
+
+    treeview.view:hover:not(:selected) { background-color: $mr_hover; }
+
+    widget.entry { border-radius: $mr_radius; }
+  }
+
+  // Sidestolpen: rolig bakgrunn, luftige rader, avrundet hover og valg.
+  .sidebar {
+    background-color: $bg_color;
+
+    .view:selected, .view.cell:selected {
+      &, &:focus {
+        color: $text_color;
+        background-color: $mr_select;
+      }
+      &:backdrop { color: $text_color; background-color: $mr_select_backdrop; }
+    }
+  }
+
+  .places-treeview {
+    -GtkTreeView-vertical-separator: 8;
+    .view.cell:hover { background-color: $mr_hover; }
+  }
+
+  statusbar {
+    padding: 2px 8px;
+    border-top: 1px solid $mr_divider;
+  }
+}

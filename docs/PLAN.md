@@ -116,7 +116,8 @@ Alle endringer sorteres i én av tre kategorier:
 | Kalender og varsler | Innebygd kalender og varsel-applet; temaet gir dem samme flyout-stil | A |
 | «Vis skrivebord» i hjørnet | Innebygd Cornerbar-applet helt til høyre | A |
 | Samlet hurtiginnstillinger-flyout (nett + lyd + lys i én) | Finnes ikke i Cinnamon; separate applets stiles likt | C |
-| Ekte uskarphet (Mica/Acrylic) bak panel og meny | Cinnamon-temaer kan ikke gjøre uskarphet; tredjeparts blur-utvidelser er ikke standard | C |
+| Ekte uskarphet (akryl) bak panel, meny og varsler | Cinnamon-temaer kan ikke gjøre uskarphet. Utvidelsen Blur Cinnamon (Spices, 2.7.0, Cinnamon 6.0+) gjør det og overstyrer bakgrunnene selv; dokumentert som valgfritt tillegg med anbefalte innstillinger. Temaet forblir solid | B |
+| Uskarphet bak programvinduer | Krever støtte i vindushåndtereren; ikke trygt i Muffin på X11 | C |
 
 ### Startmeny
 
@@ -186,6 +187,25 @@ Kjent i skjelettet, tas i senere milepæler:
 | Startmenyens oppsett | Profilen `meny`: søkefelt øverst og uten beskrivelser under appnavn | A |
 
 
+## Fluent-inspirerte detaljer (milepæl 3c)
+
+Tilpasset fra Fluent GTK theme (vinceliuice, GPL-3.0-or-later) og oversatt til våre tokens:
+
+| Del | Hva | Kat. |
+| --- | --- | --- |
+| Oppgavelinje | Normal skriftvekt, avrundede hover-flater innenfor panelet, liten grå pille under apper som kjører og bredere aksentpille under appen i fokus (SVG skalert med `background-size: contain`) | A |
+| Panel-applets | Samme avrundede hover som oppgavelinjen | A |
+| Nemo | Flat verktøylinje der knapper får form ved hover, dempede brødsmuler, rolig aksenttone for valgte filer og sidestolperader med vanlig tekstfarge, luftigere sidestolpe, slank statuslinje | A |
+| GTK-menyer og popovere | 8 px hjørner, 4 px rader med luft, lag-3-skygge | A |
+| Tekstfelt | Aksentstrek nederst ved fokus | A |
+| Varsler, OSD, Alt+Tab, verktøytips | Samme radius og lag som menyene | A |
+
+Fluents «blur»-variant er bare halvgjennomsiktige farger beregnet på GNOME-utvidelsen Blur My Shell,
+og er ikke tatt med: uten uskarphet gir gjennomsiktighet dårligere lesbarhet. Se akryl-raden over.
+
+GTK-endringene er kontrollert med skjermbilder av et Nemo-lignende testvindu (GTK 3, Xvfb) i lys og
+mørk variant. Cinnamon-skallet kan bare testes på maskinen.
+
 ## Milepæler
 
 | # | Leveranse | Status |
@@ -195,6 +215,7 @@ Kjent i skjelettet, tas i senere milepæler:
 | 2b | `apply-profile.sh`: Nemo- og oppgavelinjeprofil, «Kopier som bane» | Ferdig – testet på maskinen |
 | 3 | Tema-skjelett: `src/build.py` bygger Mint-Ro fra Mint-Y i mint-themes 2.3.8 med tokens, aksent og nytegnede bilder; `install.sh`, `uninstall.sh`, profilen `tema` | Ferdig – testet på maskinen |
 | 3b | `Mint-Ro-Dark`, avrunding på alle vindushjørner, startmeny og flyouts i Windows 11-stil, profilene `meny` og `tema-mork` | Ferdig – venter på test på maskinen |
+| 3c | Fluent-inspirert oppgavelinje, Nemo, GTK-menyer og tekstfelt; akryl som valgfritt tillegg | Ferdig – venter på test på maskinen |
 | 4 | **Nemo:** GTK-stil for verktøylinje, adresse, sidestolpe, visninger, kontekstmenyer + Nemo-del av profilen + handlinger | |
 | 5 | **Oppgavelinje:** panel, vindusliste, systemstatus, kalender, varsler + panel-del av profilen | |
 | 6 | **Startmeny:** grunnstil ferdig i 3b; finjustering etter test + valgfri Cinnamenu-profil | Delvis |

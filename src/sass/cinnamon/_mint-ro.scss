@@ -104,3 +104,77 @@ $mr_gap: 8px;                                                // luft mellom pane
     padding: 7px 15px;
   }
 }
+
+//
+// Oppgavelinjen (tilpasset fra Fluent GTK, cinnamon/_common.scss):
+// normal skriftvekt, avrundede hover-flater innenfor panelet, og Windows 11-lignende
+// indikatorer – liten grå pille under apper som kjører, bredere aksentpille under
+// appen som har fokus. Pillene er SVG-er som skaleres med panelhøyden (contain).
+//
+$mr_panel_hover:   if($variant == 'light', rgba(0, 0, 0, 0.06), rgba(255, 255, 255, 0.08));
+$mr_panel_focus:   if($variant == 'light', rgba(0, 0, 0, 0.04), rgba(255, 255, 255, 0.06));
+$mr_indicator_dir: "common-assets/mint-ro";
+$mr_suffix: if($variant == 'light', 'light', 'dark');
+
+#panel { font-weight: normal; }
+.applet-label { font-weight: normal; }
+
+.panel-top, .panel-bottom {
+  .applet-box {
+    margin: 4px 1px;
+    border-radius: $mr_small_radius;
+
+    &:hover, &:checked { background-color: $mr_panel_hover; }
+  }
+}
+
+.grouped-window-list-item-box {
+  font-weight: normal;
+  border-radius: $mr_small_radius;
+
+  &.top, &.bottom {
+    margin: 4px 1px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-width: 0;
+  }
+
+  &:hover { background-color: $mr_panel_hover; }
+
+  &.bottom:active, &.bottom:checked {
+    border-width: 0;
+    background-image: url("#{$mr_indicator_dir}/indicator-running-bottom-#{$mr_suffix}.svg");
+    background-size: contain;
+  }
+  &.top:active, &.top:checked {
+    border-width: 0;
+    background-image: url("#{$mr_indicator_dir}/indicator-running-top-#{$mr_suffix}.svg");
+    background-size: contain;
+  }
+
+  &.bottom:focus {
+    background-color: $mr_panel_focus;
+    background-image: url("#{$mr_indicator_dir}/indicator-focused-bottom-#{$mr_suffix}.svg");
+    background-size: contain;
+  }
+  &.top:focus {
+    background-color: $mr_panel_focus;
+    background-image: url("#{$mr_indicator_dir}/indicator-focused-top-#{$mr_suffix}.svg");
+    background-size: contain;
+  }
+  &:focus:hover { background-color: $mr_panel_hover; }
+}
+
+.grouped-window-list-thumbnail-menu {
+  border-radius: $radius;
+  border: 1px solid $borders_color;
+  box-shadow: $mr_flyout_shadow;
+
+  .item-box { border-radius: $mr_small_radius; }
+}
+
+// Varsler, OSD, Alt+Tab og verktøytips: samme lag og radius som menyene.
+.notification, #notification { border-radius: $radius; }
+.osd-window { border-radius: $radius; }
+.switcher-list { border-radius: $radius; box-shadow: $mr_flyout_shadow; }
+.tooltip, .panel-tooltip { border-radius: $mr_small_radius; }

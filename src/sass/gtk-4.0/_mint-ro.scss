@@ -1,3 +1,18 @@
-// Mint-Ro: komponentjusteringer for GTK.
-// Importeres til slutt, etter alle Mint-Y-regler. Tom i skjelettet; fylles i
-// milepælene for Nemo, vinduer og kontroller (se docs/PLAN.md).
+// Mint-Ro: komponentjusteringer for GTK 4.
+// Importeres til slutt, etter alle Mint-Y-regler (se docs/DESIGN.md).
+// Deler er tilpasset fra Fluent GTK theme av vinceliuice (GPL-3.0-or-later).
+
+$mr_radius: 4px;
+$mr_menu_radius: 8px;
+$mr_menu_shadow: 0 8px 16px rgba(0, 0, 0, if($variant == 'light', 0.18, 0.40));
+
+popover > contents {
+  border-radius: $mr_menu_radius;
+  box-shadow: $mr_menu_shadow, 0 0 0 1px $separator_color;
+}
+
+popover.menu modelbutton { border-radius: $mr_radius; }
+
+tooltip { border-radius: $mr_radius; }
+
+entry:focus-within { box-shadow: inset 0 -2px $selected_bg_color; }

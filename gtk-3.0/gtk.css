@@ -5831,3 +5831,174 @@ hdyleaflet:last-child headerbar {
 hdyleaflet:first-child headerbar {
   border-top-left-radius: 8px;
 }
+
+.csd.popup decoration {
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18), 0 0 0 1px #e5e5e5;
+}
+
+.csd menu, .csd .menu, .csd .context-menu, .csd popover.touch-selection,
+.csd popover.background.touch-selection {
+  padding: 4px 0;
+  border-radius: 8px;
+}
+
+.csd menu menuitem, .csd .menu menuitem, .csd .context-menu menuitem, .csd popover.touch-selection menuitem {
+  border-radius: 4px;
+  margin: 0 4px;
+  padding: 6px 10px;
+}
+
+popover.background {
+  border-radius: 8px;
+}
+
+.csd popover.background {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18), 0 0 0 1px #e5e5e5;
+}
+
+popover.background modelbutton.flat {
+  border-radius: 4px;
+}
+
+tooltip.background {
+  border-radius: 4px;
+}
+
+.csd tooltip decoration, tooltip.csd decoration {
+  border-radius: 4px;
+}
+
+entry:focus {
+  box-shadow: inset 0 -2px #1f7a57;
+}
+
+.nemo-window .primary-toolbar {
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 6px 4px;
+}
+
+.nemo-window .primary-toolbar button:not(.text-button):not(.suggested-action):not(.destructive-action) {
+  margin: 0 2px;
+  min-height: 24px;
+  min-width: 24px;
+  padding: 3px;
+  border-radius: 4px;
+  border-color: transparent;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+.nemo-window .primary-toolbar button:not(.text-button):not(.suggested-action):not(.destructive-action):hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nemo-window .primary-toolbar button:not(.text-button):not(.suggested-action):not(.destructive-action):active, .nemo-window .primary-toolbar button:not(.text-button):not(.suggested-action):not(.destructive-action):checked {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.nemo-window .primary-toolbar button:not(.text-button):not(.suggested-action):not(.destructive-action):disabled {
+  background-color: transparent;
+}
+
+.nemo-window .primary-toolbar button.text-button {
+  padding-left: 8px;
+  padding-right: 8px;
+  margin: 0;
+  border-radius: 4px;
+  border-color: transparent;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  color: #5f5f5f;
+}
+
+.nemo-window .primary-toolbar button.text-button:hover {
+  color: #1b1b1b;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nemo-window .primary-toolbar button.text-button:active, .nemo-window .primary-toolbar button.text-button:checked {
+  color: #1b1b1b;
+  background-color: transparent;
+}
+
+.nemo-window .primary-toolbar button.text-button:checked:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nemo-window .primary-toolbar button.text-button:disabled {
+  color: rgba(27, 27, 27, 0.55);
+}
+
+.nemo-window .primary-toolbar entry {
+  min-height: 24px;
+  margin: 0 2px;
+  border-radius: 4px;
+}
+
+.nemo-window .toolbar button {
+  border-radius: 4px;
+}
+
+.nemo-window scrolledwindow.frame {
+  border-style: none;
+}
+
+.nemo-window .nemo-window-pane .view:selected, .nemo-window .nemo-window-pane .view:selected:focus,
+.nemo-window .nemo-window-pane .view text:selected,
+.nemo-window .nemo-window-pane iconview text:selected,
+.nemo-window .nemo-window-pane .view text:selected:focus,
+.nemo-window .nemo-window-pane iconview:selected,
+.nemo-window .nemo-window-pane iconview:selected:focus,
+.nemo-window .nemo-window-pane treeview.view:selected,
+.nemo-window .nemo-window-pane treeview.view:selected:focus {
+  color: #1b1b1b;
+  background-color: rgba(31, 122, 87, 0.16);
+}
+
+.nemo-window .nemo-window-pane .view:selected:backdrop,
+.nemo-window .nemo-window-pane .view text:selected:backdrop,
+.nemo-window .nemo-window-pane iconview text:selected:backdrop,
+.nemo-window .nemo-window-pane iconview:selected:backdrop,
+.nemo-window .nemo-window-pane treeview.view:selected:backdrop {
+  color: #1b1b1b;
+  background-color: rgba(31, 122, 87, 0.1);
+}
+
+.nemo-window .nemo-window-pane treeview.view:hover:not(:selected) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nemo-window .nemo-window-pane widget.entry {
+  border-radius: 4px;
+}
+
+.nemo-window .sidebar {
+  background-color: #f3f3f3;
+}
+
+.nemo-window .sidebar .view:selected, .nemo-window .sidebar iconview:selected, .nemo-window .sidebar .view:selected:focus, .nemo-window .sidebar .view.cell:selected, .nemo-window .sidebar .view.cell:selected:focus {
+  color: #1b1b1b;
+  background-color: rgba(31, 122, 87, 0.16);
+}
+
+.nemo-window .sidebar .view:selected:backdrop, .nemo-window .sidebar iconview:selected:backdrop, .nemo-window .sidebar .view.cell:selected:backdrop {
+  color: #1b1b1b;
+  background-color: rgba(31, 122, 87, 0.1);
+}
+
+.nemo-window .places-treeview {
+  -GtkTreeView-vertical-separator: 8;
+}
+
+.nemo-window .places-treeview .view.cell:hover, .nemo-window .places-treeview iconview.cell:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nemo-window statusbar {
+  padding: 2px 8px;
+  border-top: 1px solid #e5e5e5;
+}
