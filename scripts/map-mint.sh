@@ -16,7 +16,7 @@
 set -uo pipefail
 umask 077   # sikkerhetskopien kan inneholde personlige innstillinger
 
-VERSION="1"
+VERSION="2"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/mint-ro/backups"
 ROOT="${MINT_RO_BACKUP_DIR:-$DEFAULT_ROOT}"
@@ -60,9 +60,15 @@ REPORT="$DEST/rapport.md"
 
 # ---------- Hjelpefunksjoner for kartlegging ----------
 # Returnerer verdien eller en lesbar forklaring, aldri en feil.
+# Skjemalisten hentes én gang. Ikke bruk «gsettings … | grep -q» her: med pipefail
+# gir det falske «finnes ikke» når grep avslutter tidlig (SIGPIPE).
+SCHEMAS=""
+have gsettings && SCHEMAS="$(gsettings list-schemas 2>/dev/null)"
+has_schema() { [ -n "$SCHEMAS" ] && grep -qxF -- "$1" <<<"$SCHEMAS"; }
+
 gs() {
   if ! have gsettings; then echo "(gsettings mangler)"; return; fi
-  if ! gsettings list-schemas 2>/dev/null | grep -qx "$1"; then echo "(skjema $1 finnes ikke)"; return; fi
+  if ! has_schema "$1"; then echo "(skjema $1 finnes ikke)"; return; fi
   gsettings get "$1" "$2" 2>/dev/null || echo "(nøkkel $2 finnes ikke)"
 }
 
@@ -308,7 +314,7 @@ done
   for schema in org.nemo.preferences org.nemo.window-state org.nemo.icon-view org.nemo.list-view; do
     echo "#### $schema"
     echo '```'
-    if have gsettings && gsettings list-schemas 2>/dev/null | grep -qx "$schema"; then
+    if have gsettings && has_schema "$schema"; then
       gsettings list-recursively "$schema" 2>/dev/null | sed "s/^$schema //" | sort
     else
       echo "(skjema $schema finnes ikke)"

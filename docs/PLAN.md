@@ -22,6 +22,37 @@ Relevant fra Cinnamon/Nemo 6.6:
 - Mint 23 (Cinnamon 6.8, ventet rundt jul 2026) får full Wayland-støtte. Kartleggingen
   registrerer om økten er X11 eller Wayland.
 
+### Funn fra første maskin (31.10.2026)
+
+Første kartlegging (`map-mint.sh` v1) manglet alle `org.cinnamon`-innstillinger på grunn av
+en feil i skriptet, rettet i v2. Panel, aktive temaer og effekter må derfor kartlegges på nytt.
+Det som er bekreftet:
+
+| Område | Funn | Betydning for planen |
+| --- | --- | --- |
+| System | Mint 22.3, Cinnamon 6.6.9, Muffin 6.6.3, Nemo 6.6.3, X11 | Planen for 6.6 gjelder. Bygg og test for X11 først |
+| GTK | GTK 3.24.41, GTK 4.14.5, libadwaita 1.5.0 med Mint-patcher (`mint3`), libAdapta ikke installert | Undersøk om Mints libadwaita lar `gtk-4.0` i temaet virke, før `~/.config/gtk-4.0` vurderes |
+| Grunntema | `mint-themes` 2.3.8, `mint-l-theme` 2.0.6 | Skjelettet bygges fra kildekoden til mint-themes 2.3.8, så alle selektorer i Cinnamon 6.6 dekkes |
+| Grafikk | NVIDIA GTX 1050, én skjerm 1920×1080 | Skygger og compositing er realistisk; test også med skalering |
+| Applets | Bare innebygde, ingen fra Spices | Standardprofilen kan bygges helt på innebygde applets (A) |
+| Nemo-utvidelser | `nemo-preview`, `nemo-fileroller`, `nemo-share`, `nemo-emblems` | Hurtigvisning og komprimering finnes allerede |
+| Nemo-handlinger | Ingen egne; Mints standardhandlinger | «Kopier som bane» må legges til som egen handling |
+| Ikoner og markører | Papirus og Bibata er installert | Gode, frie kandidater – ingen nye pakker trengs |
+| `sassc` | Ikke installert | Ferdig CSS sjekkes inn; brukeren trenger ikke byggeverktøy |
+
+Nemo er allerede nær målet. Verktøylinjen viser tilbake, fram, opp, søk,
+adressebytte og visningsvalg. Adressen vises som brødsmuler, og menylinje, sidestolpe
+og statuslinje er på. Profilen trenger bare disse endringene:
+
+| Nøkkel | Nå | Foreslått | Hvorfor |
+| --- | --- | --- | --- |
+| `show-reload-icon-toolbar` | `false` | `true` | Oppdater-knapp som i Windows 11 |
+| `list-view default-column-order` / `default-visible-columns` | navn, størrelse, type, endret | navn, endret, type, størrelse | Kjent kolonnerekkefølge |
+| `list-view default-zoom-level` | `smaller` | `small` | Litt luftigere rader, i tråd med 32 px-rader |
+
+Disse beholdes som de er, fordi de er brukerens egne valg: skjulte filer vises,
+dobbeltklikk, mapper først og ikonvisning som standard.
+
 ## Tre kategorier
 
 Alle endringer sorteres i én av tre kategorier:
@@ -114,7 +145,7 @@ vanlig Mint-tema.
 | # | Leveranse | Status |
 | --- | --- | --- |
 | 1 | Grunnstruktur, `map-mint.sh`, `restore.sh`, README | Ferdig |
-| 2 | Kartlegging av faktisk maskin (inkl. Nemo, applets, utvidelser) og justert plan | Venter på rapport |
+| 2 | Kartlegging av faktisk maskin (inkl. Nemo, applets, utvidelser) og justert plan | Delvis – Nemo og pakker kartlagt; panel og temaer må kjøres på nytt med v2 |
 | 3 | Tema-skjelett: `index.theme` og `cinnamon.css` bygget fra kildekoden til mint-themes for **installert** versjon (så alle selektorer dekkes), tokens innført | |
 | 4 | **Nemo:** GTK-stil for verktøylinje, adresse, sidestolpe, visninger, kontekstmenyer + Nemo-del av profilen + handlinger | |
 | 5 | **Oppgavelinje:** panel, vindusliste, systemstatus, kalender, varsler + panel-del av profilen | |
