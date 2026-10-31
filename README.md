@@ -189,7 +189,8 @@ emoji- eller hjemmemappe-kategori. Festede apper er Cinnamons favoritter – hø
 
 Virker både med den innebygde menyen og med Cinnamenu, og kan kombineres med `startmeny`.
 Ikonet lagres i `~/.local/share/mint-ro/`, teksten ved siden av knappen fjernes, og størrelsen
-settes til 28 px. Har filnavnet `-symbolic`, farges ikonet etter temaet. Windows-logoen er et
+settes til 28 px. Har filnavnet `-symbolic`, farges ikonet etter temaet. Se [docs/menyikoner.png](docs/menyikoner.png)
+for ferdige forslag; tre egne ikoner ligger i `icons/menyknapp/`. Windows-logoen er et
 varemerke og brukes ikke i prosjektet. `restore.sh` gir deg det gamle ikonet tilbake.
 
 ### Valgfritt: akryl (uskarp bakgrunn)
