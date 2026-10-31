@@ -1,0 +1,11 @@
+# Brukerens sikkerhetskopier skal aldri i Git
+backups/*
+!backups/README.md
+
+# Lokale kartleggingsrapporter (del bevisst ved å flytte dem til docs/survey/)
+*.dconf
+rapport.md
+
+# Byggefiler
+*.swp
+.DS_Store
