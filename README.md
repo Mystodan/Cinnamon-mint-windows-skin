@@ -11,7 +11,7 @@ proprietær grafikk. Se [designgrunnlaget](docs/DESIGN.md) og [planen](docs/PLAN
 
 > **Status – milepæl 1 ferdig:** grunnstruktur, kartlegging og sikkerhetskopiering.
 > **Testet:** oppsettsprofil for Nemo og oppgavelinjen.
-> **Klart til test:** temaskjelettet Mint-Ro (`install.sh`, `apply-profile.sh tema`).
+> **Klart til test:** mørk variant, avrundede vinduer og ny startmeny (`install.sh`, `apply-profile.sh meny`, `tema` / `tema-mork`).
 > **Neste:** stil for Nemo, deretter panel og meny.
 
 ## Krav
@@ -26,7 +26,8 @@ proprietær grafikk. Se [designgrunnlaget](docs/DESIGN.md) og [planen](docs/PLAN
 
 | Mappe | Innhold |
 | --- | --- |
-| `cinnamon/`, `gtk-2.0/`, `gtk-3.0/`, `gtk-4.0/`, `libadwaita-1.5/`, `libadwaita-1.7/`, `metacity-1/`, `index.theme` | Det ferdige temaet (generert, ikke rediger direkte) |
+| `cinnamon/`, `gtk-2.0/`, `gtk-3.0/`, `gtk-4.0/`, `libadwaita-1.5/`, `libadwaita-1.7/`, `metacity-1/`, `index.theme` | Det ferdige lyse temaet Mint-Ro (generert, ikke rediger direkte) |
+| `Mint-Ro-Dark/` | Det ferdige mørke temaet (generert) |
 | `src/` | Kilde: designtokens og justeringer i SCSS, og byggeskriptet |
 | `nemo/actions/` | Nemo-handlinger, som «Kopier som bane» |
 | `scripts/` | Kartlegging, sikkerhetskopi, gjenoppretting og oppsettsprofiler |
@@ -120,7 +121,8 @@ av Cinnamons egne innstillinger. Det endrer ikke temaet og installerer ingen pak
 | `nemo` | Oppdater-knapp i verktøylinjen, kolonner i rekkefølgen navn, endret, type, størrelse, litt luftigere listevisning, og «Kopier som bane» i høyreklikkmenyen |
 | `oppgavelinje` | Menyknapp og apper i midten, panelhøyde 48 px, systemstatus samlet til høyre, varsler ved klokka, klokke over dato. Skillelinjen og favoritt-appleten fjernes fra panelet; favorittene ligger fortsatt i menyen |
 | `oppgavelinje-venstre` | Som over, men menyknapp og apper til venstre |
-| `alt` | `nemo` + `oppgavelinje` |
+| `meny` | Startmenyen med søkefelt øverst og uten beskrivelser under appnavnene |
+| `alt` | `nemo` + `oppgavelinje` + `meny` |
 
 Skriptet viser hver endring med gammel og ny verdi, ber om bekreftelse og tar
 sikkerhetskopi med `map-mint.sh` først. Angre med kommandoen det skriver ut, eller med
@@ -131,20 +133,22 @@ sikkerhetskopi med `map-mint.sh` først. Angre med kommandoen det skriver ut, el
 ## Steg 3: installer og aktiver temaet
 
 ```bash
-./scripts/install.sh                        # kopier temaet til ~/.themes/Mint-Ro
-./scripts/apply-profile.sh --dry-run tema   # se hva som endres
-./scripts/apply-profile.sh tema             # aktiver for skrivebord, programmer og vinduer
+./scripts/install.sh                        # kopier Mint-Ro og Mint-Ro-Dark til ~/.themes
+./scripts/apply-profile.sh tema             # aktiver lys variant
+./scripts/apply-profile.sh tema-mork        # eller mørk variant
 ```
 
-`install.sh --activate` gjør begge deler. Temaet kan også velges i
-Systeminnstillinger → Temaer. Ikoner, markør og skrift endres ikke.
+Begge profilene viser endringene og tar sikkerhetskopi først. `tema-mork` setter også
+systemets fargeskjema til mørkt, så GTK 4/libadwaita-programmer følger; `tema` setter det
+tilbake. `install.sh --activate` / `--activate-dark` gjør alt i ett. Temaene kan også velges
+i Systeminnstillinger → Temaer. Ikoner, markør og skrift endres ikke.
 
 Gå tilbake med `./scripts/restore.sh`, og fjern deretter temaet med
 `./scripts/uninstall.sh` (som nekter så lenge Mint-Ro er i bruk).
 
-**Status:** Mint-Ro er foreløpig Mint-Y med Mint-Ro-farger: mørkere grønn aksent med god
-kontrast, roligere grått, avrundede menyer i Cinnamon og tydeligere feltkanter. Stilen for
-Nemo, panel, meny og vinduer kommer i de neste milepælene.
+**Status:** Mint-Ro bygger på Mint-Y med Mint-Ro-farger i lys og mørk variant, vinduer
+avrundet på alle hjørner, og startmeny og flyouts som svever over panelet i Windows 11-stil.
+Finjustering av Nemo, panel og GTK-kontroller kommer i de neste milepælene.
 
 ### Bygge temaet selv
 

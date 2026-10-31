@@ -157,15 +157,15 @@ def reorder_columns(values):
     return first + [c for c in values if c not in first]
 
 
-def calendar(path, fmt, tooltip, write):
-    """Skriver «nøkkel: gammel → ny» for endringer; skriver fila bare med write=True."""
+def applet_settings(path, wanted, write):
+    """Setter verdier i en applets innstillingsfil (~/.config/cinnamon/spices/<uuid>/<id>.json).
+    Returnerer «nøkkel: gammel → ny» for hver endring; skriver fila bare med write=True."""
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
-    wanted = {"use-custom-format": True, "custom-format": fmt, "custom-tooltip-format": tooltip}
     changes = []
     for k, v in wanted.items():
         if k not in data or not isinstance(data[k], dict):
-            raise ProfileError("kalenderinnstillingen mangler nøkkelen %s" % k)
+            raise ProfileError("innstillingen %s finnes ikke i %s" % (k, os.path.basename(path)))
         if data[k].get("value") != v:
             changes.append("%s: %s → %s" % (k, json.dumps(data[k].get("value"), ensure_ascii=False),
                                             json.dumps(v, ensure_ascii=False)))
@@ -177,6 +177,25 @@ def calendar(path, fmt, tooltip, write):
             f.write("\n")
         os.replace(tmp, path)
     return changes
+
+
+def calendar(path, fmt, tooltip, write):
+    return applet_settings(path, {"use-custom-format": True, "custom-format": fmt,
+                                  "custom-tooltip-format": tooltip}, write)
+
+
+def parse_pairs(pairs):
+    """key=JSON-verdi, f.eks. search-position="top" show-description=false."""
+    out = {}
+    for p in pairs:
+        k, sep, v = p.partition("=")
+        if not sep or not k:
+            raise ProfileError("forventet nøkkel=verdi: %s" % p)
+        try:
+            out[k] = json.loads(v)
+        except json.JSONDecodeError:
+            raise ProfileError("ugyldig JSON-verdi for %s: %s" % (k, v))
+    return out
 
 
 def main(argv):
@@ -197,6 +216,11 @@ def main(argv):
         print(fmt_strv(reorder_columns(parse_strv(args[0]))))
     elif cmd == "calendar":         # FILE FORMAT TOOLTIP [--write]
         for c in calendar(args[0], args[1], args[2], "--write" in args[3:]):
+            print(c)
+    elif cmd == "applet":           # FILE [--write] key=json ...
+        write = "--write" in args[1:]
+        pairs = [x for x in args[1:] if x != "--write"]
+        for c in applet_settings(args[0], parse_pairs(pairs), write):
             print(c)
     else:
         raise ProfileError("ukjent kommando: %s" % cmd)

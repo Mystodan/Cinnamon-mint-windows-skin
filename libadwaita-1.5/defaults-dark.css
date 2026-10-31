@@ -1,4 +1,4 @@
-@define-color mint_accent #1f7a57;
+@define-color mint_accent #22855f;
 @define-color mint_header #222226;
 @define-color mint_button_hover #454545;
 @define-color mint_button_unfocused #616166;
@@ -6,7 +6,7 @@
 /* GTK NAMED COLORS ---------------- use responsibly! */
 @define-color accent_bg_color @mint_accent;
 @define-color accent_fg_color white;
-@define-color accent_color @mint_accent;
+@define-color accent_color #4fc79a;
 @define-color destructive_bg_color @red_4;
 @define-color destructive_fg_color white;
 @define-color destructive_color #ff7b63;

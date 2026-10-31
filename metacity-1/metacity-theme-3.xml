@@ -40,7 +40,7 @@
 
 <!-- ::: GEOMETRY ::: -->
 
-<frame_geometry name="normal" title_scale="medium" rounded_top_left="8" rounded_top_right="8">
+<frame_geometry name="normal" title_scale="medium" rounded_top_left="8" rounded_top_right="8" rounded_bottom_left="8" rounded_bottom_right="8">
 	<distance name="left_width" value="1" />
 	<distance name="right_width" value="1" />
 	<distance name="bottom_height" value="1" />

@@ -168,10 +168,23 @@ Mappene `cinnamon/`, `gtk-*`, `libadwaita-*`, `metacity-1/` og `index.theme` er 
 
 Kjent i skjelettet, tas i senere milepæler:
 
-- Hjørneradius er Mint-Ys, unntatt Cinnamon-menyer (8 px). GTK-radius justeres komponent for komponent.
+- Hjørneradius i GTK-kontroller er fortsatt Mint-Ys og justeres komponent for komponent.
 - Mint lar libadwaita-apper følge temaet via `libadwaita-1.5/` og `libadwaita-1.7/`. Der er bare
   aksenten byttet; bakgrunnsfargene er fortsatt Mint-Ys (milepæl 8). `~/.config/gtk-4.0` trengs ikke.
-- Bare lys variant av Cinnamon-skallet bygges. GTK-mørk (`gtk-dark.css`) har Mint-Ro-tokens.
+- GTK 3-programmer med egen tittellinje (CSD) rundes bare øverst: GTK 3 klipper ikke innholdet etter
+  vindushjørnene, så nederste hjørner ville fått synlige firkantkanter (kategori C). Vinduer med
+  Mint-ramme, som Nemo, og GTK 4/libadwaita-programmer rundes på alle fire hjørner.
+
+## Mørk modus, vinduer og startmeny (milepæl 3b)
+
+| Del | Løsning | Kat. |
+| --- | --- | --- |
+| Mørk modus | Eget tema `Mint-Ro-Dark` (Cinnamon, GTK 2/3/4, libadwaita), aktiveres med `apply-profile.sh tema-mork`, som også setter systemets fargeskjema til mørkt så libadwaita-apper følger | A |
+| Vindushjørner | Vindusrammen (metacity) rundes 8 px på alle fire hjørner; maksimerte og festede vinduer har rette hjørner | A |
+| Startmeny og flyouts | Svever 8 px over panelet (CSS-marg, som Cinnamon regner med ved plassering), 8 px på alle hjørner, tynn kant og lag-3-skygge. Gjelder alle popup-menyer, så kalender, lyd og nettverk får samme stil | A |
+| Startmenyens innhold | Søkefelt som avrundet «pille» med aksentfokus, 4 px avrundede rader, myk hover, aksentstripe på valgt kategori, nøytrale av/på-knapper (rødt først ved hover) | A |
+| Startmenyens oppsett | Profilen `meny`: søkefelt øverst og uten beskrivelser under appnavn | A |
+
 
 ## Milepæler
 
@@ -180,10 +193,11 @@ Kjent i skjelettet, tas i senere milepæler:
 | 1 | Grunnstruktur, `map-mint.sh`, `restore.sh`, README | Ferdig |
 | 2 | Kartlegging av faktisk maskin (inkl. Nemo, applets, utvidelser) og justert plan | Ferdig |
 | 2b | `apply-profile.sh`: Nemo- og oppgavelinjeprofil, «Kopier som bane» | Ferdig – testet på maskinen |
-| 3 | Tema-skjelett: `src/build.py` bygger Mint-Ro fra Mint-Y i mint-themes 2.3.8 med tokens, aksent og nytegnede bilder; `install.sh`, `uninstall.sh`, profilen `tema` | Ferdig – venter på test på maskinen |
+| 3 | Tema-skjelett: `src/build.py` bygger Mint-Ro fra Mint-Y i mint-themes 2.3.8 med tokens, aksent og nytegnede bilder; `install.sh`, `uninstall.sh`, profilen `tema` | Ferdig – testet på maskinen |
+| 3b | `Mint-Ro-Dark`, avrunding på alle vindushjørner, startmeny og flyouts i Windows 11-stil, profilene `meny` og `tema-mork` | Ferdig – venter på test på maskinen |
 | 4 | **Nemo:** GTK-stil for verktøylinje, adresse, sidestolpe, visninger, kontekstmenyer + Nemo-del av profilen + handlinger | |
 | 5 | **Oppgavelinje:** panel, vindusliste, systemstatus, kalender, varsler + panel-del av profilen | |
-| 6 | **Startmeny:** stil for innebygd meny + valgfri Cinnamenu-profil | |
+| 6 | **Startmeny:** grunnstil ferdig i 3b; finjustering etter test + valgfri Cinnamenu-profil | Delvis |
 | 7 | Vinduer, dialoger, OSD, Alt+Tab | |
 | 8 | GTK 3 generelt, GTK 4/libadwaita | |
 | 9 | Mørk modus, tilgjengelighetstest (tastatur, tekstskalering, høy kontrast, uten animasjoner) | |

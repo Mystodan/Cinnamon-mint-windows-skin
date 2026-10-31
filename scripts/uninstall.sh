@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# uninstall.sh – fjerner Mint-Ro fra ~/.themes.
+# uninstall.sh – fjerner Mint-Ro og Mint-Ro-Dark fra ~/.themes.
 #
-# Nekter hvis Mint-Ro er i bruk, slik at skrivebordet ikke står uten tema.
+# Nekter hvis et av dem er i bruk, slik at skrivebordet ikke står uten tema.
 # Bytt tilbake først med restore.sh (eller velg et annet tema i Systeminnstillinger).
 #
 # Bruk:
@@ -9,7 +9,7 @@
 
 set -uo pipefail
 
-THEME_NAME="Mint-Ro"
+NAMES=(Mint-Ro Mint-Ro-Dark)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 die() { echo "Feil: $*" >&2; exit 1; }
 
@@ -21,20 +21,22 @@ if command -v gsettings >/dev/null 2>&1; then
   for k in "org.cinnamon.theme name" "org.cinnamon.desktop.interface gtk-theme" "org.cinnamon.desktop.wm.preferences theme"; do
     # shellcheck disable=SC2086
     v="$(gsettings get $k 2>/dev/null)" || continue
-    [ "$v" = "'$THEME_NAME'" ] && in_use+=("$k")
+    for n in "${NAMES[@]}"; do [ "$v" = "'$n'" ] && in_use+=("$k = $n"); done
   done
   if [ "${#in_use[@]}" -gt 0 ]; then
-    echo "Mint-Ro er i bruk her:" >&2
+    echo "Mint-Ro er i bruk:" >&2
     printf '  %s\n' "${in_use[@]}" >&2
     die "bytt tema først, for eksempel med: $SCRIPT_DIR/restore.sh"
   fi
 fi
 
 removed=0
-for d in "$HOME/.themes/$THEME_NAME" "$HOME/.local/share/themes/$THEME_NAME"; do
+for n in "${NAMES[@]}"; do
+ for d in "$HOME/.themes/$n" "$HOME/.local/share/themes/$n"; do
   [ -e "$d" ] || continue
-  grep -qx "Name=$THEME_NAME" "$d/index.theme" 2>/dev/null || { echo "Hopper over $d: ser ikke ut som Mint-Ro." >&2; continue; }
+  grep -qx "Name=$n" "$d/index.theme" 2>/dev/null || { echo "Hopper over $d: ser ikke ut som $n." >&2; continue; }
   rm -rf -- "$d" && { echo "Fjernet: ${d/#"$HOME"/\~}"; removed=1; }
+ done
 done
 [ "$removed" -eq 1 ] || echo "Mint-Ro var ikke installert."
 echo "Sikkerhetskopier og Nemo-/panelinnstillinger er ikke rørt. Gå tilbake med restore.sh."

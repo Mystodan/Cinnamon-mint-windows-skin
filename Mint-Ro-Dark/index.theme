@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Mint-Ro-Dark
+Comment=Mørk variant av Mint-Ro
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Mint-Ro-Dark
+MetacityTheme=Mint-Ro-Dark
+IconTheme=Mint-Y
+CursorTheme=DMZ-White
+ButtonLayout=:minimize,maximize,close

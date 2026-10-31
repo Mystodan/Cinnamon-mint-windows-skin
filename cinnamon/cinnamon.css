@@ -2982,3 +2982,112 @@ On-Screen Keyboard (<= Cinnamon 6.4)
 }
 
 /* ****** DEPRECATED */
+.menu {
+  margin: 8px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+}
+
+.menu-top, .menu-bottom, .menu-left, .menu-right {
+  border-radius: 8px;
+}
+
+.popup-menu-item {
+  border-radius: 4px;
+}
+
+.popup-menu-item:active {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.appmenu-right-box {
+  padding: 16px;
+  spacing: 12px;
+}
+
+.appmenu-categories-applications-box {
+  spacing: 12px;
+}
+
+.appmenu-sidebar {
+  background-color: #f3f3f3;
+  border-color: #e5e5e5;
+  padding: 16px 0;
+}
+
+.appmenu-application-button, .appmenu-application-button-selected, .appmenu-category-button, .appmenu-category-button-selected, .appmenu-category-button-greyed, .appmenu-sidebar-button {
+  border-radius: 4px;
+}
+
+.appmenu-application-button:hover, .appmenu-sidebar-button:hover, .appmenu-category-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.appmenu-application-button-selected {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.appmenu-category-button-selected {
+  background-color: rgba(0, 0, 0, 0.08);
+  box-shadow: inset 3px 0 0 0 #1f7a57;
+}
+
+.appmenu-application-button-description {
+  color: #5f5f5f;
+}
+
+.appmenu-system-button {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.appmenu-system-button-lock:hover, .appmenu-system-button-logout:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.appmenu-system-button-shutdown {
+  color: #1b1b1b;
+  background-color: transparent;
+}
+
+.appmenu-system-button-shutdown:hover {
+  color: #ffffff;
+  background-color: #c42b1c;
+}
+
+.appmenu-sidebar .appmenu-system-button {
+  background-color: transparent;
+}
+
+.appmenu-sidebar .appmenu-system-button-lock:hover, .appmenu-sidebar .appmenu-system-button-logout:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.appmenu-sidebar .appmenu-system-button-shutdown {
+  color: #1b1b1b;
+  background-color: transparent;
+}
+
+.appmenu-sidebar .appmenu-system-button-shutdown:hover {
+  color: #ffffff;
+  background-color: #c42b1c;
+}
+
+.menu-top .appmenu-sidebar,
+.menu-bottom .appmenu-sidebar,
+.menu-left .appmenu-sidebar,
+.menu-right .appmenu-sidebar {
+  border-radius: 8px 0 0 8px;
+}
+
+#appmenu-search-entry {
+  border-radius: 9999px;
+  padding: 8px 16px;
+  border: 1px solid #8a8a8a;
+  background-color: #fbfbfb;
+}
+
+#appmenu-search-entry:focus {
+  border: 2px solid #1f7a57;
+  padding: 7px 15px;
+}

@@ -1,3 +1,106 @@
 // Mint-Ro: komponentjusteringer for Cinnamon-skallet.
-// Importeres til slutt, etter alle Mint-Y-regler. Tom i skjelettet; fylles i
-// milepælene for panel, meny og dialoger (se docs/PLAN.md).
+// Importeres til slutt, etter alle Mint-Y-regler, og bruker tokens fra
+// _mint-ro-tokens.scss (se docs/DESIGN.md).
+
+// Lag-tokens som bare brukes her.
+$mr_hover:    if($variant == 'light', rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.06));  // bg-subtle-hover
+$mr_selected: if($variant == 'light', rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.09));
+$mr_small_radius: 4px;                                       // kontroller og listeelementer
+$mr_flyout_shadow: 0 8px 16px rgba(0, 0, 0, if($variant == 'light', 0.18, 0.40));   // lag 3
+$mr_gap: 8px;                                                // luft mellom panel og flyout
+
+//
+// Popup-menyer og flyouts (startmeny, kalender, lyd, nettverk, høyreklikk):
+// svever med luft fra panelet og er avrundet på alle hjørner.
+// Cinnamon regner CSS-margen inn når menyen plasseres (popupMenu.js).
+//
+.menu {
+  margin: $mr_gap;
+  border: 1px solid $borders_color;
+  box-shadow: $mr_flyout_shadow;
+
+  &-top, &-bottom, &-left, &-right { border-radius: $radius; }
+}
+
+.popup-menu-item {
+  border-radius: $mr_small_radius;
+
+  &:active { background-color: $mr_selected; }
+}
+
+//
+// Startmenyen (menu@cinnamon.org i Cinnamon 6.6, klassene appmenu-*)
+//
+.appmenu {
+  &-right-box {
+    padding: 16px;
+    spacing: 12px;
+  }
+
+  &-categories-applications-box { spacing: 12px; }
+
+  // Sidestolpen følger menyens hjørner på venstre side, uansett panelplassering.
+  &-sidebar {
+    background-color: $panel_bg;
+    border-color: $separator_color;
+    padding: 16px 0;
+  }
+
+  &-application-button,
+  &-application-button-selected,
+  &-category-button,
+  &-category-button-selected,
+  &-category-button-greyed,
+  &-sidebar-button {
+    border-radius: $mr_small_radius;
+  }
+
+  &-application-button:hover,
+  &-sidebar-button:hover,
+  &-category-button:hover { background-color: $mr_hover; }
+
+  &-application-button-selected { background-color: $mr_selected; }
+
+  // Valgt kategori: rolig bakgrunn og en aksentstripe til venstre, som i Windows 11-navigasjon.
+  &-category-button-selected {
+    background-color: $mr_selected;
+    box-shadow: inset 3px 0 0 0 $accent_color;
+  }
+
+  &-application-button-description { color: $dim_color; }
+
+  // Av/på-knapper: nøytrale, rød først ved hover på «Slå av».
+  &-system-button {
+    border-color: transparent;
+    background-color: transparent;
+
+    &-lock:hover, &-logout:hover { background-color: $mr_hover; }
+    &-shutdown { color: $fg_color; background-color: transparent; }
+    &-shutdown:hover { color: #ffffff; background-color: $osd_destructive_color; }
+  }
+
+  &-sidebar .appmenu-system-button {
+    background-color: transparent;
+    &-lock:hover, &-logout:hover { background-color: $mr_hover; }
+    &-shutdown { color: $fg_color; background-color: transparent; }
+    &-shutdown:hover { color: #ffffff; background-color: $osd_destructive_color; }
+  }
+}
+
+.menu-top .appmenu-sidebar,
+.menu-bottom .appmenu-sidebar,
+.menu-left .appmenu-sidebar,
+.menu-right .appmenu-sidebar { border-radius: $radius 0 0 $radius; }
+
+// Søkefeltet: avrundet «pille» med tydelig fokus i aksentfarge.
+#appmenu-search-entry {
+  border-radius: 9999px;
+  padding: 8px 16px;
+  border: 1px solid $entry_border;
+  background-color: $bg_color;
+
+  &:focus {
+    border: 2px solid $accent_color;
+    padding: 7px 15px;
+  }
+}

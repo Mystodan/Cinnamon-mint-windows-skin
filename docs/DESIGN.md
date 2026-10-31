@@ -38,14 +38,17 @@ Alle stilfiler henter verdier herfra. Endringer gjøres her først.
 | `bg-subtle-pressed` | `#00000006` | `#ffffff0a` | Trykket tilstand |
 | `fg-primary` | `#1b1b1b` | `#f2f2f2` | Brødtekst (15,5:1 / 14,6:1) |
 | `fg-secondary` | `#5f5f5f` | `#a8a8a8` | Hjelpetekst, metadata (5,8:1 / 6,9:1) |
-| `accent` | `#1f7a57` | `#4fc79a` | Primærknapp, valgt element, fokusring, lenker |
-| `fg-on-accent` | `#ffffff` | `#0f2b1f` | Tekst på aksent (5,3:1 / 7,2:1) |
+| `accent-fill` | `#1f7a57` | `#22855f` | Primærknapp, valgt element, avkrysning, fokusring (5,3:1 / 4,6:1 mot hvit tekst; 3,1:1 mot mørk flate) |
+| `accent-text` | `#1f7a57` | `#4fc79a` | Lenker og aksent som tekst (4,8:1 / 6,7:1) |
+| `fg-on-accent` | `#ffffff` | `#ffffff` | Tekst og hakemerker på `accent-fill` |
 | `stroke-control` | `#8a8a8a` | `#8a8a8a` | Kant på felt, avkrysningsbokser (≥ 3:1) |
 | `stroke-divider` | `#e5e5e5` | `#3b3b3b` | Dekorative skillelinjer (ikke informasjonsbærende) |
 | `danger` | `#c42b1c` | `#ff99a4` | Feil, destruktive handlinger (5,5:1 / 7,0:1) |
 
 Kontrastverdiene er regnet ut mot `bg-layer`/`bg-base`. Mint sin vanlige grønnfarge
 `#35a77c` gir bare 3:1 med hvit tekst og er derfor ikke brukt til tekst eller knappefyll.
+I mørk modus må fyllfargen både bære hvit tekst (≥ 4,5:1) og synes mot mørk flate (≥ 3:1);
+`#22855f` er valgt fordi den klarer begge.
 
 ### Avstand
 
@@ -57,7 +60,7 @@ mellom grupper 16–24 px.
 | Element | Radius |
 | --- | --- |
 | Knapper, felt, listeelementer, faner | 4 px |
-| Vinduer, menyer, flyouts, varsler, dialoger | 8 px |
+| Vinduer (alle fire hjørner), menyer, flyouts, varsler, dialoger | 8 px |
 | Panel | 0 px (kant til kant) |
 
 ### Typografi
@@ -110,7 +113,8 @@ fungere uten bevegelse.
 | Oppgavelinje | Senterstilte festede og åpne apper, menyknapp først | Kjent for Windows-brukere; valgfritt venstrestilt |
 | Oppgavelinje | Diskret indikator under åpne apper, lengre for aktivt vindu | Tydelig status uten tekst |
 | Oppgavelinje | Klokke og dato i to linjer helt til høyre, varsler ved siden av | Kjent plassering |
-| Startmeny | Søk tilgjengelig straks Super trykkes | Raskeste vei til apper |
+| Startmeny | Søk tilgjengelig straks Super trykkes, søkefelt øverst | Raskeste vei til apper |
+| Startmeny og flyouts | Svever 8 px over panelet, avrundet på alle hjørner, myk skygge | Tydelig lag over skrivebordet |
 | Startmeny | Festede apper øverst, alle apper ett klikk unna | Lite rot, rask tilgang |
 | Filutforsker | Tilbake/fram/opp til venstre, adresse i midten, søk til høyre | Kjent navigasjon |
 | Filutforsker | Adresse som brødsmuler, tekstfelt ved klikk (Ctrl+L) | Oversikt og presisjon |
