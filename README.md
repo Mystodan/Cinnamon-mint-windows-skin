@@ -179,6 +179,19 @@ først, kategorier og nylig brukte filer (som «Anbefalt»), søk øverst, av/p�
 emoji- eller hjemmemappe-kategori. Festede apper er Cinnamons favoritter – høyreklikk en app for
 å feste den. `restore.sh` bytter tilbake til den innebygde menyen.
 
+### Valgfritt: eget ikon på menyknappen
+
+```bash
+./scripts/apply-profile.sh --menyikon=https://eksempel.no/ikon.svg   # fra nettet (https, SVG/PNG, maks 2 MB)
+./scripts/apply-profile.sh --menyikon=~/Bilder/ikon.png              # fra en fil
+./scripts/apply-profile.sh --menyikon=start-here-symbolic            # et ikon fra ikontemaet
+```
+
+Virker både med den innebygde menyen og med Cinnamenu, og kan kombineres med `startmeny`.
+Ikonet lagres i `~/.local/share/mint-ro/`, teksten ved siden av knappen fjernes, og størrelsen
+settes til 28 px. Har filnavnet `-symbolic`, farges ikonet etter temaet. Windows-logoen er et
+varemerke og brukes ikke i prosjektet. `restore.sh` gir deg det gamle ikonet tilbake.
+
 ### Valgfritt: akryl (uskarp bakgrunn)
 
 Cinnamon-temaer kan ikke gjøre bakgrunnen uskarp selv, så Mint-Ro er solid og lesbart som

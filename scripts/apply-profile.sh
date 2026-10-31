@@ -17,6 +17,7 @@
 #   ./scripts/apply-profile.sh tema-mork             # aktiver Mint-Ro-Dark (mørk)
 #   ./scripts/apply-profile.sh ikoner                # bruk Fluent-ikoner (installer med install-icons.sh)
 #   ./scripts/apply-profile.sh alt                   # nemo + oppgavelinje + meny
+#   ./scripts/apply-profile.sh --menyikon=<URL|fil|ikonnavn>   # eget ikon på menyknappen
 #   ./scripts/apply-profile.sh --dry-run <profil>    # vis bare hva som ville skjedd
 #   ./scripts/apply-profile.sh --yes <profil>        # ikke spør om bekreftelse
 
@@ -30,10 +31,10 @@ ACTIONS_DST="$HOME/.local/share/nemo/actions"
 SPICES_CFG="$HOME/.config/cinnamon/spices"
 PANEL_HEIGHT=48
 
-YES=0; DRY=0; DO_NEMO=0; DO_TASKBAR=""; DO_MENU=0; DO_THEME=""; DO_ICONS=0; ICON_COLOR=""; DO_STARTMENU=0
+YES=0; DRY=0; DO_NEMO=0; DO_TASKBAR=""; DO_MENU=0; DO_THEME=""; DO_ICONS=0; ICON_COLOR=""; DO_STARTMENU=0; DO_MENUICON=0; MENU_ICON_SRC=""
 ICONS_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/icons"
 
-usage() { sed -n '2,23p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '2,24p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 die() { echo "Feil: $*" >&2; exit 1; }
 have() { command -v "$1" >/dev/null 2>&1; }
 py() { python3 -I "$HELPER" "$@"; }
@@ -53,13 +54,14 @@ while [ $# -gt 0 ]; do
     tema-mork|tema-mørk) DO_THEME=dark ;;
     ikoner) DO_ICONS=1 ;;
     startmeny) DO_STARTMENU=1 ;;
+    --menyikon=*) DO_MENUICON=1; MENU_ICON_SRC="${1#--menyikon=}" ;;
     --ikonfarge=*) ICON_COLOR="${1#--ikonfarge=}" ;;
     alt) DO_NEMO=1; DO_TASKBAR=center; DO_MENU=1 ;;
     *) die "ukjent profil eller valg: $1 (se --help)" ;;
   esac
   shift
 done
-[ "$DO_NEMO" -eq 1 ] || [ -n "$DO_TASKBAR" ] || [ "$DO_MENU" -eq 1 ] || [ -n "$DO_THEME" ] || [ "$DO_ICONS" -eq 1 ] || [ "$DO_STARTMENU" -eq 1 ] \
+[ "$DO_NEMO" -eq 1 ] || [ -n "$DO_TASKBAR" ] || [ "$DO_MENU" -eq 1 ] || [ -n "$DO_THEME" ] || [ "$DO_ICONS" -eq 1 ] || [ "$DO_STARTMENU" -eq 1 ] || [ "$DO_MENUICON" -eq 1 ] \
   || die "velg minst én profil (se --help)."
 
 # ---------- Forutsetninger ----------
@@ -77,7 +79,7 @@ if [ "$DO_NEMO" -eq 1 ]; then
   has_schema org.nemo.preferences && has_schema org.nemo.list-view \
     || die "Nemos innstillinger finnes ikke. Er Nemo installert?"
 fi
-if [ -n "$DO_TASKBAR" ] || [ "$DO_MENU" -eq 1 ] || [ "$DO_STARTMENU" -eq 1 ]; then
+if [ -n "$DO_TASKBAR" ] || [ "$DO_MENU" -eq 1 ] || [ "$DO_STARTMENU" -eq 1 ] || [ "$DO_MENUICON" -eq 1 ]; then
   has_schema org.cinnamon || die "Cinnamons innstillinger finnes ikke. Kjøres dette i Cinnamon?"
 fi
 THEME_NAME=""
@@ -129,7 +131,7 @@ add_applet() {
   JOB_LABEL+=("$label"); JOB_FILE+=("$file"); JOB_PAIRS+=("$*"); JOB_CHANGES+=("$changes")
 }
 
-if [ -n "$DO_TASKBAR" ] || [ "$DO_MENU" -eq 1 ] || [ "$DO_STARTMENU" -eq 1 ]; then
+if [ -n "$DO_TASKBAR" ] || [ "$DO_MENU" -eq 1 ] || [ "$DO_STARTMENU" -eq 1 ] || [ "$DO_MENUICON" -eq 1 ]; then
   APPLETS="$(gsettings get org.cinnamon enabled-applets)"
   PANEL_ID="$(py target-panel "$APPLETS")" || die "fant ikke panelet med menyknappen."
 fi
@@ -176,6 +178,47 @@ if [ "$DO_MENU" -eq 1 ]; then
   fi
 fi
 
+# ---------- Eget menyikon ----------
+# Lastes ned/kontrolleres nå (før bekreftelse) og installeres i ~/.local/share/mint-ro.
+ICON_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/mint-ro"
+ICON_TMP=""; ICON_DEST=""; ICON_VALUE=""; ICON_CHANGED=0; ICON_PAIRS_CM=(); ICON_PAIRS_MENU=()
+MENU_ICON_SIZE=28
+if [ "$DO_MENUICON" -eq 1 ]; then
+  [ -n "$MENU_ICON_SRC" ] || die "--menyikon trenger en nettadresse, en fil eller et ikonnavn."
+  ICON_TMP="$(mktemp)" || die "kunne ikke lage midlertidig fil."
+  trap 'rm -f "$ICON_TMP"' EXIT
+  case "$MENU_ICON_SRC" in
+    https://*)
+      have curl || die "curl mangler. Installer med: sudo apt install curl"
+      curl -fsSL --proto '=https' --max-time 30 --max-filesize 2000000 -o "$ICON_TMP" "$MENU_ICON_SRC" \
+        || die "kunne ikke laste ned ikonet (bare https, maks 2 MB)." ;;
+    http://*) die "bruk en https-adresse." ;;
+    */*|*.svg|*.png)
+      f="${MENU_ICON_SRC/#\~/$HOME}"
+      [ -f "$f" ] || die "fant ikke filen $MENU_ICON_SRC"
+      [ "$(stat -c %s "$f")" -le 2000000 ] || die "filen er større enn 2 MB."
+      cp "$f" "$ICON_TMP" || die "kunne ikke lese $MENU_ICON_SRC" ;;
+    *)
+      [[ "$MENU_ICON_SRC" =~ ^[A-Za-z0-9._-]+$ ]] || die "ugyldig ikonnavn: $MENU_ICON_SRC"
+      ICON_VALUE="$MENU_ICON_SRC"; rm -f "$ICON_TMP"; ICON_TMP="" ;;
+  esac
+  if [ -n "$ICON_TMP" ]; then
+    # Bare SVG eller PNG.
+    if [ "$(head -c 4 "$ICON_TMP" | od -An -tx1 | tr -d ' \n')" = "89504e47" ]; then ext=png
+    elif head -c 4096 "$ICON_TMP" | grep -qi '<svg'; then ext=svg
+    else die "ikonet må være SVG eller PNG."; fi
+    name="menyikon"
+    # Behold «-symbolic» i navnet hvis kilden har det, så Cinnamon farger ikonet etter temaet.
+    case "$MENU_ICON_SRC" in *-symbolic*) name="menyikon-symbolic" ;; esac
+    ICON_DEST="$ICON_DIR/$name.$ext"
+    ICON_VALUE="$ICON_DEST"
+    cmp -s "$ICON_TMP" "$ICON_DEST" 2>/dev/null || ICON_CHANGED=1
+  fi
+  ICON_PAIRS_CM=(menu-icon-custom=true "menu-icon=\"$ICON_VALUE\"" menu-icon-size-custom=true
+    menu-icon-size=$MENU_ICON_SIZE 'menu-label=""')
+  ICON_PAIRS_MENU=(menu-custom=true "menu-icon=\"$ICON_VALUE\"" menu-icon-size=$MENU_ICON_SIZE 'menu-label=""')
+fi
+
 # Windows 11-lignende oppsett for Cinnamenu: rutenett, festede apper først, nylig brukte
 # som «anbefalt», av/på-linje nederst, ingen emoji/hjemmemappe-kategorier.
 CINNAMENU_WIN11=(applications-view-mode=1 show-sidebar=true sidebar-placement=1 sidebar-favorites=0
@@ -184,6 +227,7 @@ CINNAMENU_WIN11=(applications-view-mode=1 show-sidebar=true sidebar-placement=1 
   open-on-category=1 apps-grid-icon-size=48 category-icon-size=16 sidebar-icon-size=24
   custom-menu-width=680 custom-menu-height=620)
 NEW_CONFIG=""; NEW_CONFIG_SCHEMA=""
+[ "$DO_STARTMENU" -eq 0 ] || [ "$DO_MENUICON" -eq 0 ] || CINNAMENU_WIN11+=("${ICON_PAIRS_CM[@]}")
 if [ "$DO_STARTMENU" -eq 1 ]; then
   cm_dir=""
   for d in "$HOME/.local/share/cinnamon/applets/Cinnamenu@json" /usr/share/cinnamon/applets/Cinnamenu@json; do
@@ -208,6 +252,20 @@ if [ "$DO_STARTMENU" -eq 1 ]; then
     NEW_CONFIG="$cm_cfg"
   fi
 fi
+
+if [ "$DO_MENUICON" -eq 1 ] && [ "$DO_STARTMENU" -eq 0 ]; then
+  menu_uuid=""; for u in Cinnamenu@json menu@cinnamon.org; do
+    [ -n "$(py instance-id "$APPLETS" "$u" "panel$PANEL_ID")" ] && { menu_uuid="$u"; break; }
+  done
+  if applet_file "$menu_uuid" "panel$PANEL_ID" "Menyikon"; then
+    if [ "$menu_uuid" = "Cinnamenu@json" ]; then
+      add_applet "Menyikon (Cinnamenu)" "$APPLET_PATH" "${ICON_PAIRS_CM[@]}"
+    else
+      add_applet "Menyikon" "$APPLET_PATH" "${ICON_PAIRS_MENU[@]}"
+    fi
+  fi
+fi
+
 
 if [ -n "$DO_THEME" ]; then
   add_set org.cinnamon.theme name "'$THEME_NAME'"
@@ -270,7 +328,7 @@ elif [ -n "$DO_THEME" ]; then
 fi
 
 # ---------- Vis plan ----------
-if [ "${#SETS[@]}" -eq 0 ] && [ "${#FILES[@]}" -eq 0 ] && [ "${#JOB_FILE[@]}" -eq 0 ] && [ -z "$NEW_CONFIG" ]; then
+if [ "${#SETS[@]}" -eq 0 ] && [ "${#FILES[@]}" -eq 0 ] && [ "${#JOB_FILE[@]}" -eq 0 ] && [ -z "$NEW_CONFIG" ] && [ "$ICON_CHANGED" -eq 0 ]; then
   echo "Ingenting å endre – profilen er allerede i bruk."
   for n in "${NOTES[@]}"; do echo "Merk: $n"; done
   exit 0
@@ -288,6 +346,7 @@ for i in "${!JOB_FILE[@]}"; do
   echo "  ${JOB_LABEL[$i]} ($(tilde "${JOB_FILE[$i]}")):"
   while IFS= read -r l; do echo "      $l"; done <<<"${JOB_CHANGES[$i]}"
 done
+[ "$ICON_CHANGED" -eq 0 ] || echo "  Menyikon: $(tilde "$ICON_DEST") (fra $MENU_ICON_SRC)"
 if [ -n "$NEW_CONFIG" ]; then
   echo "  Cinnamenu, ny innstillingsfil ($(tilde "$NEW_CONFIG")):"
   printf '      %s\n' "${CINNAMENU_WIN11[@]}"
@@ -310,6 +369,10 @@ echo "Sikkerhetskopi: $BK"
 
 # ---------- Utfør ----------
 fail=0
+if [ "$ICON_CHANGED" -eq 1 ]; then
+  if mkdir -p "$ICON_DIR" && install -m 644 "$ICON_TMP" "$ICON_DEST"; then echo "  ✓ $(tilde "$ICON_DEST")"
+  else echo "  ✗ kunne ikke lagre ikonet" >&2; fail=1; fi
+fi
 # Cinnamenus innstillinger må finnes før appleten legges i panelet.
 if [ -n "$NEW_CONFIG" ]; then
   if py new-config "$NEW_CONFIG_SCHEMA" "$NEW_CONFIG" "${CINNAMENU_WIN11[@]}"; then echo "  ✓ Cinnamenu-oppsett"
