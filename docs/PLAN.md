@@ -154,14 +154,33 @@ profilene `nemo`, `oppgavelinje`, `oppgavelinje-venstre` og `alt` (senere også 
 Tema og profil er uavhengige: temaet kan brukes med vanlig Mint-oppsett, og profilen med
 vanlig Mint-tema.
 
+## Temaskjelettet (milepæl 3)
+
+Mint-Ro bygges fra kildekoden til Mint-Y, ikke ved å kopiere ferdige filer:
+
+1. `src/build.py` henter mint-themes 2.3.8 og bytter Mint-grønt (`#35a854`) mot Mint-Ro-aksenten (`#1f7a57`).
+2. `src/sass/<del>/_mint-ro-tokens.scss` importeres rett etter Mint-Ys fargefil og setter fargene
+   fra DESIGN.md. `_mint-ro.scss` importeres til slutt og er stedet for komponentjusteringer.
+3. SCSS kompileres med sassc. Uten Mint-Ro-filene gir verktøykjeden byte-identisk CSS med Mint-Y 2.3.8.
+4. Bare bilder som inneholder aksentfargen, tegnes på nytt, i samme mål som Mint-Y.
+
+Mappene `cinnamon/`, `gtk-*`, `libadwaita-*`, `metacity-1/` og `index.theme` er generert.
+
+Kjent i skjelettet, tas i senere milepæler:
+
+- Hjørneradius er Mint-Ys, unntatt Cinnamon-menyer (8 px). GTK-radius justeres komponent for komponent.
+- Mint lar libadwaita-apper følge temaet via `libadwaita-1.5/` og `libadwaita-1.7/`. Der er bare
+  aksenten byttet; bakgrunnsfargene er fortsatt Mint-Ys (milepæl 8). `~/.config/gtk-4.0` trengs ikke.
+- Bare lys variant av Cinnamon-skallet bygges. GTK-mørk (`gtk-dark.css`) har Mint-Ro-tokens.
+
 ## Milepæler
 
 | # | Leveranse | Status |
 | --- | --- | --- |
 | 1 | Grunnstruktur, `map-mint.sh`, `restore.sh`, README | Ferdig |
 | 2 | Kartlegging av faktisk maskin (inkl. Nemo, applets, utvidelser) og justert plan | Ferdig |
-| 2b | `apply-profile.sh`: Nemo- og oppgavelinjeprofil, «Kopier som bane» | Ferdig – venter på test på maskinen |
-| 3 | Tema-skjelett: `index.theme` og `cinnamon.css` bygget fra kildekoden til mint-themes for **installert** versjon (så alle selektorer dekkes), tokens innført | |
+| 2b | `apply-profile.sh`: Nemo- og oppgavelinjeprofil, «Kopier som bane» | Ferdig – testet på maskinen |
+| 3 | Tema-skjelett: `src/build.py` bygger Mint-Ro fra Mint-Y i mint-themes 2.3.8 med tokens, aksent og nytegnede bilder; `install.sh`, `uninstall.sh`, profilen `tema` | Ferdig – venter på test på maskinen |
 | 4 | **Nemo:** GTK-stil for verktøylinje, adresse, sidestolpe, visninger, kontekstmenyer + Nemo-del av profilen + handlinger | |
 | 5 | **Oppgavelinje:** panel, vindusliste, systemstatus, kalender, varsler + panel-del av profilen | |
 | 6 | **Startmeny:** stil for innebygd meny + valgfri Cinnamenu-profil | |

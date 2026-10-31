@@ -1,0 +1,49 @@
+// Mint-Ro designtokens for GTK (se docs/DESIGN.md).
+// Importeres rett etter Mint-Ys _colors.scss og overstyrer variablene der.
+
+@if $variant == 'light' {
+    $base_color:            #fbfbfb;          // bg-layer: innholdsflater, lister, felt
+    $text_color:            #1b1b1b;          // fg-primary
+    $header_bg:             #f3f3f3;          // bg-base: tittellinje og vindu i ett
+    $bg_color:              #f3f3f3;
+    $borders_color:         #d1d1d1;
+    $separator_color:       #e5e5e5;          // stroke-divider
+    $header_bg_backdrop:    #f6f6f6;
+    $header_border:         #e5e5e5;
+    $entry_border:          #8a8a8a;          // stroke-control (≥ 3:1)
+    $fg_color:              #1b1b1b;
+    $button_bg:             #fbfbfb;
+    $insensitive_bg_color:  mix($bg_color, $base_color, 40%);
+    $trough_color_treeview: #e5e5e5;
+} @else {
+    $base_color:            #2b2b2b;
+    $text_color:            #f2f2f2;
+    $header_bg:             #202020;
+    $bg_color:              #202020;
+    $borders_color:         #3b3b3b;
+    $separator_color:       #3b3b3b;
+    $header_bg_backdrop:    #232323;
+    $header_border:         #1a1a1a;
+    $entry_border:          #8a8a8a;
+    $fg_color:              #f2f2f2;
+    $button_bg:             #2d2d2d;
+    $insensitive_bg_color:  lighten($bg_color, 2%);
+    $trough_color_treeview: darken($bg_color, 5%);
+}
+
+$header_fg:                 $fg_color;
+$dark_sidebar_fg:           $fg_color;
+$insensitive_fg_color:      transparentize($fg_color, 0.45);
+$dim_label_fg_color:        if($variant == 'light', #5f5f5f, #a8a8a8);   // fg-secondary
+$entry_bg:                  $base_color;
+$filechooser_bg:            $header_bg;
+$dark_sidebar_bg:           $bg_color;
+$dark_sidebar_border:       $separator_color;
+$button_border:             $borders_color;
+$button_active_border:      darken($button_border, 10%);
+$header_border_unfocused:   lighten($header_border, 5%);
+
+$link_color:                if($variant == 'light', $accent_color, #4fc79a);
+$link_visited_color:        $link_color;
+$error_color:               if($variant == 'light', #c42b1c, #ff99a4);    // danger
+$destructive_color:         $error_color;

@@ -8,7 +8,7 @@ Dette repoet bygges av flere bidragsytere, også AI-agenter. Disse reglene gjeld
 - Installer kun per bruker (`~/.themes`, `~/.icons`, `~/.config`, `~/.local/share/cinnamon`, `~/.local/share/nemo`). Aldri `sudo`, aldri `/usr`.
 - Kjør `scripts/map-mint.sh` (sikkerhetskopi) før noe aktiveres eller overskrives.
 - Hver endring av brukeroppsett må kunne tilbakeføres med `scripts/restore.sh`.
-- Temafiler i `cinnamon/`, `gtk-3.0/`, `gtk-4.0/` (og senere `metacity-1/`). Nemo-handlinger i `nemo/actions/` (prefiks `mint-ro-`). Skript i `scripts/`, dokumentasjon i `docs/`.
+- Temamappene (`cinnamon/`, `gtk-*`, `libadwaita-*`, `metacity-1/`, `index.theme`) genereres av `src/build.py` – rediger aldri disse direkte. Endre `src/sass/` (tokens i `_mint-ro-tokens.scss`, komponentjusteringer i `_mint-ro.scss`) og bygg på nytt. Nemo-handlinger i `nemo/actions/` (prefiks `mint-ro-`). Skript i `scripts/`, dokumentasjon i `docs/`.
 - Innstillinger endres bare gjennom `scripts/apply-profile.sh`, som viser endringene, ber om bekreftelse og tar sikkerhetskopi først. Kontroller nøkler mot kildekoden for installert versjon.
 - Sjekk aldri inn brukerens sikkerhetskopier eller rapporter med personlige data utenom `docs/survey/`.
 - Bygg på kartleggingsrapporten i `docs/survey/`. Ikke anta Cinnamon- eller GTK-versjon.
@@ -22,6 +22,7 @@ Dette repoet bygges av flere bidragsytere, også AI-agenter. Disse reglene gjeld
 - Bruke navnet «Windows» i temanavn eller filnavn som brukeren ser.
 - Overskrive `~/.config/gtk-4.0` uten `--gtk4` og sikkerhetskopi.
 - Endre systemfiler eller Mint-pakker.
+- Endre `UPSTREAM_TAG` i `src/build.py` uten å bygge på nytt og teste mot installert Cinnamon-versjon.
 
 ## Arbeidsflyt
 

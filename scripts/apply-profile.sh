@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
-# apply-profile.sh – setter Mint-Ro-oppsett for Nemo og oppgavelinjen.
+# apply-profile.sh – setter Mint-Ro-oppsett for Nemo, oppgavelinjen og temaet.
 #
 # Endrer bare innstillinger (gsettings), Nemo-handlinger i ~/.local/share/nemo/actions
 # og kalender-appletens egne innstillinger. Viser alltid hva som endres, ber om
 # bekreftelse og tar sikkerhetskopi med map-mint.sh først. Alt kan angres med
-# restore.sh. Krever ikke sudo, installerer ingen pakker og endrer ikke tema.
+# restore.sh. Krever ikke sudo og installerer ingen pakker. Temaet aktiveres bare
+# med profilen «tema», og må være installert med install.sh først.
 #
 # Bruk:
 #   ./scripts/apply-profile.sh nemo                  # Nemo som Windows 11-filutforsker
 #   ./scripts/apply-profile.sh oppgavelinje          # sentrert oppgavelinje
 #   ./scripts/apply-profile.sh oppgavelinje-venstre  # samme, venstrestilt
+#   ./scripts/apply-profile.sh tema                  # aktiver Mint-Ro (skrivebord, programmer, vinduer)
 #   ./scripts/apply-profile.sh alt                   # nemo + oppgavelinje
 #   ./scripts/apply-profile.sh --dry-run <profil>    # vis bare hva som ville skjedd
 #   ./scripts/apply-profile.sh --yes <profil>        # ikke spør om bekreftelse
@@ -22,10 +24,11 @@ HELPER="$SCRIPT_DIR/lib/profile.py"
 ACTIONS_SRC="$REPO_DIR/nemo/actions"
 ACTIONS_DST="$HOME/.local/share/nemo/actions"
 PANEL_HEIGHT=48
+THEME_NAME="Mint-Ro"
 
-YES=0; DRY=0; DO_NEMO=0; DO_TASKBAR=""
+YES=0; DRY=0; DO_NEMO=0; DO_TASKBAR=""; DO_THEME=0
 
-usage() { sed -n '2,17p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '2,19p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 die() { echo "Feil: $*" >&2; exit 1; }
 have() { command -v "$1" >/dev/null 2>&1; }
 py() { python3 -I "$HELPER" "$@"; }
@@ -39,12 +42,13 @@ while [ $# -gt 0 ]; do
     nemo) DO_NEMO=1 ;;
     oppgavelinje) DO_TASKBAR=center ;;
     oppgavelinje-venstre) DO_TASKBAR=left ;;
+    tema) DO_THEME=1 ;;
     alt) DO_NEMO=1; DO_TASKBAR=center ;;
     *) die "ukjent profil eller valg: $1 (se --help)" ;;
   esac
   shift
 done
-[ "$DO_NEMO" -eq 1 ] || [ -n "$DO_TASKBAR" ] || die "velg minst én profil (se --help)."
+[ "$DO_NEMO" -eq 1 ] || [ -n "$DO_TASKBAR" ] || [ "$DO_THEME" -eq 1 ] || die "velg minst én profil (se --help)."
 
 # ---------- Forutsetninger ----------
 [ "$(id -u)" -ne 0 ] || die "kjør som vanlig bruker, ikke med sudo."
@@ -63,6 +67,16 @@ if [ "$DO_NEMO" -eq 1 ]; then
 fi
 if [ -n "$DO_TASKBAR" ]; then
   has_schema org.cinnamon || die "Cinnamons innstillinger finnes ikke. Kjøres dette i Cinnamon?"
+fi
+if [ "$DO_THEME" -eq 1 ]; then
+  for sc in org.cinnamon.theme org.cinnamon.desktop.interface org.cinnamon.desktop.wm.preferences; do
+    has_schema "$sc" || die "innstillingen $sc finnes ikke. Kjøres dette i Cinnamon?"
+  done
+  theme_dir=""
+  for d in "$HOME/.themes/$THEME_NAME" "$HOME/.local/share/themes/$THEME_NAME"; do
+    [ -f "$d/index.theme" ] && [ -f "$d/cinnamon/cinnamon.css" ] && { theme_dir="$d"; break; }
+  done
+  [ -n "$theme_dir" ] || die "$THEME_NAME er ikke installert. Kjør først: $SCRIPT_DIR/install.sh"
 fi
 
 # ---------- Plan ----------
@@ -117,6 +131,13 @@ if [ -n "$DO_TASKBAR" ]; then
   else
     NOTES+=("Klokke i to linjer hoppes over: fant ikke kalender-appleten i panelet")
   fi
+fi
+
+if [ "$DO_THEME" -eq 1 ]; then
+  add_set org.cinnamon.theme name "'$THEME_NAME'"
+  add_set org.cinnamon.desktop.interface gtk-theme "'$THEME_NAME'"
+  add_set org.cinnamon.desktop.wm.preferences theme "'$THEME_NAME'"
+  NOTES+=("Ikoner, markør og skrift endres ikke.")
 fi
 
 # ---------- Vis plan ----------
@@ -179,6 +200,8 @@ if [ "$fail" -ne 0 ]; then
   echo "Noe feilet. Gå tilbake med: $SCRIPT_DIR/restore.sh \"$BK\"" >&2
   exit 1
 fi
-echo "Ferdig. Lukk og åpne Nemo på nytt for å se endringene der."
+echo "Ferdig."
+[ "$DO_NEMO" -eq 0 ] || echo "Lukk og åpne Nemo på nytt for å se endringene der."
 [ -z "$DO_TASKBAR" ] || echo "Panelet oppdateres med en gang. Trykk Ctrl+Alt+Esc hvis klokka ikke endrer seg."
+[ "$DO_THEME" -eq 0 ] || echo "Temaet tas i bruk med en gang. Allerede åpne programmer kan trenge omstart."
 echo "Angre alt med: $SCRIPT_DIR/restore.sh \"$BK\""

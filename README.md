@@ -10,8 +10,9 @@ Det inneholder ingen Microsoft-logoer, varemerker, ikoner, lyder eller annen
 proprietær grafikk. Se [designgrunnlaget](docs/DESIGN.md) og [planen](docs/PLAN.md).
 
 > **Status – milepæl 1 ferdig:** grunnstruktur, kartlegging og sikkerhetskopiering.
-> **Klart til test:** oppsettsprofil for Nemo og oppgavelinjen (`apply-profile.sh`).
-> **Neste:** tema-skjelett, deretter Nemo-, panel- og menystil.
+> **Testet:** oppsettsprofil for Nemo og oppgavelinjen.
+> **Klart til test:** temaskjelettet Mint-Ro (`install.sh`, `apply-profile.sh tema`).
+> **Neste:** stil for Nemo, deretter panel og meny.
 
 ## Krav
 
@@ -25,16 +26,14 @@ proprietær grafikk. Se [designgrunnlaget](docs/DESIGN.md) og [planen](docs/PLAN
 
 | Mappe | Innhold |
 | --- | --- |
-| `cinnamon/` | Cinnamon-skalltemaet: panel, meny, varsler, dialoger, OSD |
-| `gtk-3.0/` | GTK 3-temaet |
-| `gtk-4.0/` | GTK 4-temaet |
+| `cinnamon/`, `gtk-2.0/`, `gtk-3.0/`, `gtk-4.0/`, `libadwaita-1.5/`, `libadwaita-1.7/`, `metacity-1/`, `index.theme` | Det ferdige temaet (generert, ikke rediger direkte) |
+| `src/` | Kilde: designtokens og justeringer i SCSS, og byggeskriptet |
 | `nemo/actions/` | Nemo-handlinger, som «Kopier som bane» |
 | `scripts/` | Kartlegging, sikkerhetskopi, gjenoppretting og oppsettsprofiler |
 | `backups/` | Tom i Git – sikkerhetskopier lagres lokalt (se under) |
 | `docs/` | Designgrunnlag, plan og kartleggingsrapporter som deles bevisst |
 
-Repoet er selve temamappen: når temaet er klart, kopieres `cinnamon/`, `gtk-3.0/`,
-`gtk-4.0/` og `index.theme` til `~/.themes/Mint-Ro/`.
+Repoet er selve temamappen: `install.sh` kopierer temadelene til `~/.themes/Mint-Ro/`.
 
 ## Steg 1: kartlegg maskinen og ta sikkerhetskopi
 
@@ -129,14 +128,40 @@ sikkerhetskopi med `map-mint.sh` først. Angre med kommandoen det skriver ut, el
 
 «Kopier som bane» bruker `xclip`, `xsel`, `wl-copy` eller GTK, avhengig av hva som finnes.
 
-## Installasjon av temaet
+## Steg 3: installer og aktiver temaet
 
-Kommer i neste milepæl, når kartleggingen er gjort. Installasjonen vil:
+```bash
+./scripts/install.sh                        # kopier temaet til ~/.themes/Mint-Ro
+./scripts/apply-profile.sh --dry-run tema   # se hva som endres
+./scripts/apply-profile.sh tema             # aktiver for skrivebord, programmer og vinduer
+```
 
-- kopiere temaet til `~/.themes/Mint-Ro/`
-- kjøre `map-mint.sh` før noe aktiveres
-- bare røre `~/.config/gtk-4.0` (for libadwaita-apper) hvis du ber om det
+`install.sh --activate` gjør begge deler. Temaet kan også velges i
+Systeminnstillinger → Temaer. Ikoner, markør og skrift endres ikke.
+
+Gå tilbake med `./scripts/restore.sh`, og fjern deretter temaet med
+`./scripts/uninstall.sh` (som nekter så lenge Mint-Ro er i bruk).
+
+**Status:** Mint-Ro er foreløpig Mint-Y med Mint-Ro-farger: mørkere grønn aksent med god
+kontrast, roligere grått, avrundede menyer i Cinnamon og tydeligere feltkanter. Stilen for
+Nemo, panel, meny og vinduer kommer i de neste milepælene.
+
+### Bygge temaet selv
+
+Ferdig CSS og bilder ligger i repoet, så vanlige brukere trenger ikke bygge noe.
+Utviklere endrer `src/sass/` og bygger på nytt:
+
+```bash
+sudo apt install sassc librsvg2-bin
+python3 -I src/build.py
+```
+
+Skriptet henter Mint-Y fra mint-themes 2.3.8, bytter aksentfarge, legger inn tokenene,
+kompilerer og tegner bildene med aksentfarge på nytt.
 
 ## Lisens
 
-Ikke valgt ennå. Forslag: GPL-3.0-or-later, i tråd med Cinnamon og Mint-temaene.
+GPL-3.0-or-later – se [LICENSE](LICENSE).
+
+Mint-Ro er bygget på Mint-Y fra [mint-themes](https://github.com/linuxmint/mint-themes)
+av Clement Lefebvre og Linux Mint-teamet, lisensiert GPL-3.0-or-later.

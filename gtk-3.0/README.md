@@ -1,4 +1,4 @@
-# GTK 3-tema
+# gtk-3.0
 
-Her kommer `gtk.css` og `gtk-dark.css` for GTK 3-programmer.
-Tom til kartleggingen er gjort – se [docs/PLAN.md](../docs/PLAN.md).
+Generert av `src/build.py` fra Mint-Y i mint-themes 2.3.8, med Mint-Ro-tokens.
+Ikke rediger filene her direkte: endre `src/sass/` og kjør `python3 -I src/build.py`.

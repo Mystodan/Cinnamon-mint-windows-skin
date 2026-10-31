@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Mint-Ro
+Comment=Moderne Cinnamon-tema bygget på Mint-Y og Fluent-prinsipper
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Mint-Ro
+MetacityTheme=Mint-Ro
+IconTheme=Mint-Y
+CursorTheme=DMZ-White
+ButtonLayout=:minimize,maximize,close
